@@ -31,32 +31,40 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="newProduction" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="addLeftLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="addRightTerminal" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="addRightNonTerminal" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="leftSideID" pref="115" max="32767" attributes="0"/>
-                                  <Component id="terminalRight" max="32767" attributes="0"/>
-                                  <Component id="nonTerminalRight" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Component id="newProduction" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="addLeftLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="addRightTerminal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="addRightNonTerminal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="leftSideID" pref="115" max="32767" attributes="0"/>
+                                      <Component id="terminalRight" max="32767" attributes="0"/>
+                                      <Component id="nonTerminalRight" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
+                          <Component id="addLambdaLbl" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="addLambda" min="-2" max="-2" attributes="0"/>
                           <Component id="addLeftSide" min="-2" max="-2" attributes="0"/>
                           <Component id="addTerminalRight" min="-2" max="-2" attributes="0"/>
                           <Component id="addNonTerminalRight" min="-2" max="-2" attributes="0"/>
                           <Component id="submitGrammar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="addLeftLabel1" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="196" max="32767" attributes="0"/>
+              <EmptySpace pref="38" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -65,7 +73,9 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="52" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="addLeftLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="addLeftLabel" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="leftSideID" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -83,12 +93,17 @@
                   <Component id="nonTerminalRight" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="addNonTerminalRight" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="addLambdaLbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="addLambda" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="newProduction" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="submitGrammar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -146,30 +161,31 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="3" rowCount="0">
-                <Column editable="true" title="Left Side" type="java.lang.Object"/>
-                <Column editable="true" title="To" type="java.lang.Object"/>
-                <Column editable="true" title="Right Side" type="java.lang.Object"/>
+                <Column editable="false" title="Left Side" type="java.lang.Object"/>
+                <Column editable="false" title="To" type="java.lang.Object"/>
+                <Column editable="false" title="Right Side" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="5" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
               </TableColumnModel>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
@@ -195,7 +211,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="newProduction">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Create New Production"/>
+        <Property name="text" type="java.lang.String" value="Submit Production"/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="newProductionMouseClicked"/>
@@ -208,6 +224,30 @@
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="submitGrammarMouseClicked"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addLambdaLbl">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Monaco" size="14" style="3"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Add  &#x3bb; to Right Side: "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="addLambda">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Submit"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addLambdaMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="addLeftLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Monaco" size="12" style="3"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="REMEMBER, WHEN YOU FINISH YOUR PRODUCTION, YOU HAVE TO SUBMIT THEM"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

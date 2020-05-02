@@ -13,6 +13,8 @@ package grammars;
 public class Terminal {
 
     private char symbol;
+    
+   
 
     /**
      * Constructor to create a terminal for the grammar.

@@ -50,11 +50,11 @@ public class Grammar {
     }
 
     /**
-     * This method let us know if the grammar is well defined
+     * This method let us know if all the non terminals in the right side have a production for themselves
      *
      * @return
      */
-    public boolean isCorrect() {
+    public boolean isNonTerminalWithoutProduction() {
         List<String> namesLeft = new ArrayList<>();
         List<String> namesRight = new ArrayList<>();
         for (int i = 0; i < getProductions().size(); i++) {

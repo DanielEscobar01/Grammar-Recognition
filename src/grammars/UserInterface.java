@@ -24,12 +24,14 @@ public class UserInterface extends javax.swing.JFrame {
      */
     public UserInterface() {
         initComponents();
+        this.setResizable(false);
         terminalRight.setTransferHandler(null); // This doesnt let the user to type more than one character.
         addTerminalRight.setVisible(false); // We put in false value, until the user write the left side
         addNonTerminalRight.setVisible(false); // We put in false value, until the user write the left side
         terminalRight.setEnabled(false); // We put in false value, until the user write the left side
         nonTerminalRight.setEnabled(false); // We put in false value, until the user write the left side
         newProduction.setVisible(false);//At the first time, the user can write one production without a click in this button
+        addLambda.setVisible(false); // Hide lambda value if the user put another symbol in the production
     }
 
     /**
@@ -54,6 +56,9 @@ public class UserInterface extends javax.swing.JFrame {
         addNonTerminalRight = new javax.swing.JButton();
         newProduction = new javax.swing.JButton();
         submitGrammar = new javax.swing.JButton();
+        addLambdaLbl = new javax.swing.JLabel();
+        addLambda = new javax.swing.JButton();
+        addLeftLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,8 +91,25 @@ public class UserInterface extends javax.swing.JFrame {
             new String [] {
                 "Left Side", "To", "Right Side"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        grammarTable.setEnabled(false);
         jScrollPane2.setViewportView(grammarTable);
+        if (grammarTable.getColumnModel().getColumnCount() > 0) {
+            grammarTable.getColumnModel().getColumn(0).setResizable(false);
+            grammarTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+            grammarTable.getColumnModel().getColumn(1).setResizable(false);
+            grammarTable.getColumnModel().getColumn(1).setPreferredWidth(5);
+            grammarTable.getColumnModel().getColumn(2).setResizable(false);
+            grammarTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+        }
 
         addTerminalRight.setText("Submit");
         addTerminalRight.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -103,7 +125,7 @@ public class UserInterface extends javax.swing.JFrame {
             }
         });
 
-        newProduction.setText("Create New Production");
+        newProduction.setText("Submit Production");
         newProduction.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 newProductionMouseClicked(evt);
@@ -117,6 +139,19 @@ public class UserInterface extends javax.swing.JFrame {
             }
         });
 
+        addLambdaLbl.setFont(new java.awt.Font("Monaco", 3, 14)); // NOI18N
+        addLambdaLbl.setText("Add  λ to Right Side: ");
+
+        addLambda.setText("Submit");
+        addLambda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addLambdaMouseClicked(evt);
+            }
+        });
+
+        addLeftLabel1.setFont(new java.awt.Font("Monaco", 3, 12)); // NOI18N
+        addLeftLabel1.setText("REMEMBER, WHEN YOU FINISH YOUR PRODUCTION, YOU HAVE TO SUBMIT THEM");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,32 +163,40 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(newProduction)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(addLeftLabel)
-                                    .addComponent(addRightTerminal)
-                                    .addComponent(addRightNonTerminal))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(leftSideID, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                                    .addComponent(terminalRight)
-                                    .addComponent(nonTerminalRight))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(newProduction)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(addLeftLabel)
+                                        .addComponent(addRightTerminal)
+                                        .addComponent(addRightNonTerminal))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(leftSideID, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                                        .addComponent(terminalRight)
+                                        .addComponent(nonTerminalRight))))
+                            .addComponent(addLambdaLbl))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addLambda)
                             .addComponent(addLeftSide)
                             .addComponent(addTerminalRight)
                             .addComponent(addNonTerminalRight)
-                            .addComponent(submitGrammar))))
-                .addContainerGap(196, Short.MAX_VALUE))
+                            .addComponent(submitGrammar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(addLeftLabel1)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addLeftLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addLeftLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(leftSideID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,11 +211,15 @@ public class UserInterface extends javax.swing.JFrame {
                     .addComponent(addRightNonTerminal)
                     .addComponent(nonTerminalRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addNonTerminalRight))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addLambdaLbl)
+                    .addComponent(addLambda))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(newProduction)
                     .addComponent(submitGrammar))
-                .addGap(55, 55, 55))
+                .addGap(36, 36, 36))
         );
 
         pack();
@@ -208,6 +255,7 @@ public class UserInterface extends javax.swing.JFrame {
             nonTerminalRight.setEnabled(true); // We put in true value when the user input the left side
             NonTerminal nonTerminal = new NonTerminal(leftSideID.getText().toUpperCase()); // We create a non terminal 
             temporalProduction.setLeftSide(nonTerminal); // Add non terminal to production in left side
+            addLambda.setVisible(true);  // We are putting visible the lamba adding button
         } else {
             JOptionPane.showMessageDialog(null, "You have to input");
         }
@@ -237,6 +285,7 @@ public class UserInterface extends javax.swing.JFrame {
             model.addRow(new Object[]{leftSide, "--->", rightSide});
             Terminal terminal = new Terminal(terminalRight.getText().charAt(0));// We create a terminal
             temporalProduction.addElementRightSide(terminal); // Add terminal to production in right side
+            addLambda.setVisible(false);// Hide lambda value if the user put another symbol in the production
         } else {
             JOptionPane.showMessageDialog(null, "You have to input");
         }
@@ -267,12 +316,18 @@ public class UserInterface extends javax.swing.JFrame {
             model.addRow(new Object[]{leftSide, "--->", rightSide});
             NonTerminal nonTerminal = new NonTerminal(nonTerminalRight.getText().toUpperCase()); // We create a non terminal 
             temporalProduction.addElementRightSideN(nonTerminal);// Add non terminal to production in right side
+            addLambda.setVisible(false); // Hide lambda value if the user put another symbol in the production
         } else {
             JOptionPane.showMessageDialog(null, "You have to input");
         }
         nonTerminalRight.setText(null);
     }//GEN-LAST:event_addNonTerminalRightMouseClicked
 
+    /**
+     * This method let us create and save the current production
+     *
+     * @param evt
+     */
     private void newProductionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newProductionMouseClicked
         addLeftSide.setVisible(true); // We are activating again the button to add left side
         addTerminalRight.setVisible(false); // We are deactivating the button to add terminals to right side
@@ -285,16 +340,36 @@ public class UserInterface extends javax.swing.JFrame {
         temporalProduction = new Production(); // Reinitializing parameter
     }//GEN-LAST:event_newProductionMouseClicked
 
+    /**
+     * This method creates a grammar, if there are any problem the user have to
+     * input again the grammar
+     *
+     * @param evt
+     */
     private void submitGrammarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitGrammarMouseClicked
         rightSideAuxiliar = 0; // Reinitializing parameter
         //grammar.addProduction(temporalProduction);
-        if (!grammar.isCorrect()) {
-            JOptionPane.showMessageDialog(null, "Your grammar is wrong, please double check");
+        if (!grammar.isNonTerminalWithoutProduction()) {
+            JOptionPane.showMessageDialog(null, "One, or more of your terminals does not have a production");
             DefaultTableModel model = (DefaultTableModel) grammarTable.getModel();
             model.setRowCount(0);
         }
 
     }//GEN-LAST:event_submitGrammarMouseClicked
+
+    private void addLambdaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addLambdaMouseClicked
+        DefaultTableModel model = (DefaultTableModel) grammarTable.getModel();
+        int actualRows = model.getRowCount() - 1;
+        String rightSide = "λ";
+        String leftSide = (String) model.getValueAt(actualRows, 0);
+        model.removeRow(model.getRowCount() - 1);
+        model.addRow(new Object[]{leftSide, "--->", rightSide});
+        Terminal terminal = new Terminal(rightSide.charAt(0));// We create a terminal
+        temporalProduction.addElementRightSide(terminal); // Add terminal to production in right side
+        newProductionMouseClicked(evt);
+        newProduction.setVisible(false);
+        addLambda.setVisible(false);
+    }//GEN-LAST:event_addLambdaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -332,7 +407,10 @@ public class UserInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addLambda;
+    private javax.swing.JLabel addLambdaLbl;
     private javax.swing.JLabel addLeftLabel;
+    private javax.swing.JLabel addLeftLabel1;
     private javax.swing.JButton addLeftSide;
     private javax.swing.JButton addNonTerminalRight;
     private javax.swing.JLabel addRightNonTerminal;
