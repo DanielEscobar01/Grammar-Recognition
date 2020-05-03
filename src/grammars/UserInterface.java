@@ -366,6 +366,10 @@ public class UserInterface extends javax.swing.JFrame {
             this.leftSideID.setEnabled(true);
         } else {
             grammar.setFirstAlive();
+            CheckGrammar checkGrammar = new CheckGrammar();
+            checkGrammar.setGrammar(grammar);
+            checkGrammar.setVisible(true);
+            this.setVisible(false);          
         }
     }//GEN-LAST:event_submitGrammarMouseClicked
 
