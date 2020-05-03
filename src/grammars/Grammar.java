@@ -16,6 +16,8 @@ import java.util.List;
 public class Grammar {
 
     private List<Production> productions = new ArrayList<>();
+    private List<NonTerminal> leftSiders = new ArrayList<>();
+    private List<NonTerminal> nonTerminalsAlives = new ArrayList<>();
 
     /**
      * Constructor to create a grammar without any productions
@@ -34,11 +36,35 @@ public class Grammar {
     }
 
     /**
+     * This method let us know if the non terminal is already added into the
+     * list
+     *
+     * @param nonTerminal The non terminal to be checked
+     * @return True if the non terminal is in the list, False if the non
+     * terminal is not in the list
+     */
+    public boolean alreadyInLeft(NonTerminal nonTerminal) {
+        if (leftSiders.isEmpty()) {
+            return false;
+        } else {
+            for (int i = 0; i < leftSiders.size(); i++) {
+                if (leftSiders.get(i).getID().equalsIgnoreCase(nonTerminal.getID())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * This method let us add a new production to the grammar
      *
      * @param production
      */
     public void addProduction(Production production) {
+        if (!alreadyInLeft(production.getLeftSide())) {
+            leftSiders.add(production.getLeftSide());
+        }
         this.productions.add(production);
     }
 
@@ -50,7 +76,8 @@ public class Grammar {
     }
 
     /**
-     * This method let us know if all the non terminals in the right side have a production for themselves
+     * This method let us know if all the non terminals in the right side have a
+     * production for themselves
      *
      * @return
      */
@@ -75,7 +102,7 @@ public class Grammar {
                         flag = 1;
                     }
                 }
-                if(flag==0){
+                if (flag == 0) {
                     return false;
                 }
             }
@@ -83,7 +110,21 @@ public class Grammar {
         }
     }
 
+    /**
+     * This method let us get the productions of the grammar
+     *
+     * @return List with all productions
+     */
     public List<Production> getProductions() {
         return this.productions;
+    }
+
+    /**
+     * This method let us get all non terminals of the left side
+     *
+     * @return List with non terminals of the left side
+     */
+    public List<NonTerminal> getLeftSiders() {
+        return this.leftSiders;
     }
 }

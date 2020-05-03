@@ -337,7 +337,11 @@ public class UserInterface extends javax.swing.JFrame {
         nonTerminalRight.setEnabled(false); // We are deactivating this field to let user input the new production
         rightSideAuxiliar = 0; // Reinitializing parameter
         grammar.addProduction(temporalProduction); // We are adding the production into the grammar
+        this.newProduction.setVisible(false);
+        System.out.println(temporalProduction.getLeftSide().getClass().toString());
+        System.out.println(temporalProduction.getLeftSide().getClass().toString().equals("class grammars.NonTerminal"));
         temporalProduction = new Production(); // Reinitializing parameter
+        
     }//GEN-LAST:event_newProductionMouseClicked
 
     /**
@@ -353,8 +357,14 @@ public class UserInterface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "One, or more of your terminals does not have a production");
             DefaultTableModel model = (DefaultTableModel) grammarTable.getModel();
             model.setRowCount(0);
+            grammar.reinitialize();
+            this.addLambda.setVisible(false);
+            this.newProduction.setVisible(false);
+            this.addNonTerminalRight.setVisible(false);
+            this.addTerminalRight.setVisible(false);
+            this.addLeftSide.setVisible(true);
+            this.leftSideID.setEnabled(true);
         }
-
     }//GEN-LAST:event_submitGrammarMouseClicked
 
     private void addLambdaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addLambdaMouseClicked
