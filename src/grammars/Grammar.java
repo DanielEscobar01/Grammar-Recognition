@@ -127,4 +127,47 @@ public class Grammar {
     public List<NonTerminal> getLeftSiders() {
         return this.leftSiders;
     }
+
+    /**
+     * This method let us set the first non productions with non terminals alive
+     */
+    public void setFirstAlive() {
+        for (int i = 0; i < productions.size(); i++) {
+            if (productions.get(i).isRightSideAllTerminals()) {
+                if (nonTerminalsAlives.isEmpty()) {
+                    addNonTerminalAlive(productions.get(i).getLeftSide());
+                } else {
+                    if (!isInsideAlives(productions.get(i).getLeftSide())) {
+                        addNonTerminalAlive(productions.get(i).getLeftSide());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * This method let us know if the non terminal is inside the list of alive
+     *
+     * @param nonTerminal The non terminal to be checked
+     * @return True if the non terminal is inside, otherwise return False
+     */
+    public boolean isInsideAlives(NonTerminal nonTerminal) {
+        for (int i = 0; i < nonTerminalsAlives.size(); i++) {
+            if (nonTerminalsAlives.get(i).getID().equalsIgnoreCase(nonTerminal.getID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This method let us add a non terminal into a list where we can find non
+     * terminals alives
+     *
+     * @param nonTerminal The non terminal alive
+     */
+    public void addNonTerminalAlive(NonTerminal nonTerminal) {
+        nonTerminalsAlives.add(nonTerminal);
+    }
+
 }

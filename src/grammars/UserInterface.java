@@ -341,7 +341,7 @@ public class UserInterface extends javax.swing.JFrame {
         System.out.println(temporalProduction.getLeftSide().getClass().toString());
         System.out.println(temporalProduction.getLeftSide().getClass().toString().equals("class grammars.NonTerminal"));
         temporalProduction = new Production(); // Reinitializing parameter
-        
+
     }//GEN-LAST:event_newProductionMouseClicked
 
     /**
@@ -364,9 +364,17 @@ public class UserInterface extends javax.swing.JFrame {
             this.addTerminalRight.setVisible(false);
             this.addLeftSide.setVisible(true);
             this.leftSideID.setEnabled(true);
+        } else {
+            grammar.setFirstAlive();
         }
     }//GEN-LAST:event_submitGrammarMouseClicked
 
+    /**
+     * This method let us create a terminal lambda and the creates a new
+     * production
+     *
+     * @param evt
+     */
     private void addLambdaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addLambdaMouseClicked
         DefaultTableModel model = (DefaultTableModel) grammarTable.getModel();
         int actualRows = model.getRowCount() - 1;

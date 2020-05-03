@@ -110,5 +110,13 @@ public class Production {
     public List<NonTerminal> nonTerminalsInRight() {
         return this.nonTerminalsInRight;
     }
+    
+    /**
+     * This method let us know if the left symbol is alive because there are not NonTerminals
+     * @return True if the left symbol is alive, False if the found one NonTerminal
+     */
+    public boolean isRightSideAllTerminals(){
+        return nonTerminalsInRight().isEmpty();
+    }
 
 }
