@@ -5,9 +5,6 @@
  */
 package grammars;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class let us create a non terminal to the grammar and productions
  *
@@ -15,8 +12,6 @@ import java.util.List;
  */
 public class NonTerminal {
 
-    
-    private List<Production> productions = new ArrayList<>();
     private String id;
 
     /**
@@ -36,13 +31,19 @@ public class NonTerminal {
     public void setID(String name) {
         this.id = name.toUpperCase();
     }
-    
+
     /**
      * This method let us know the Id of a non Terminal
+     *
      * @return The Id of the non terminal.
      */
-    public String getID(){
+    public String getID() {
         return this.id;
     }
 
+    @Override
+    public String toString(){
+        return "<"+getID()+">";
+    }
+    
 }

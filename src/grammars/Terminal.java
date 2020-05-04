@@ -13,8 +13,6 @@ package grammars;
 public class Terminal {
 
     private char symbol;
-    
-   
 
     /**
      * Constructor to create a terminal for the grammar.
@@ -43,4 +41,8 @@ public class Terminal {
         return this.symbol;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(getSymbol());
+    }
 }

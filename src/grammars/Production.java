@@ -78,9 +78,6 @@ public class Production {
      * @return the terminal or non terminal in the first part of the right side
      */
     public Object firstItem() {
-        if (rightSide.isEmpty()) {
-            return null;
-        }
         return rightSide.get(0);
     }
 
@@ -99,7 +96,7 @@ public class Production {
      * @return True if the first element is lambda, otherwise returns False
      */
     public boolean firstItemIsLambda() {
-        return firstItem() == null;
+        return firstItem().toString().equalsIgnoreCase("λ");
     }
 
     /**
@@ -110,15 +107,16 @@ public class Production {
     public List<NonTerminal> nonTerminalsInRight() {
         return this.nonTerminalsInRight;
     }
-    
+
     /**
-     * This method let us know if the left symbol is alive because there are not NonTerminals
-     * @return True if the left symbol is alive, False if the found one NonTerminal
+     * This method let us know if the left symbol is alive because there are not
+     * NonTerminals
+     *
+     * @return True if the left symbol is alive, False if the found one
+     * NonTerminal
      */
-    public boolean isRightSideAllTerminals(){
+    public boolean isRightSideAllTerminals() {
         return nonTerminalsInRight().isEmpty();
     }
-    
-    
 
 }

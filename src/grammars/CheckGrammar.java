@@ -116,12 +116,7 @@ public class CheckGrammar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    public boolean isS(){
-        for (int i = 0; i < grammar.getProductions().size(); i++) {
-            
-        }
-        return true;
-    }
+
     
     /**
      * This method let us set the grammar to be evaluated

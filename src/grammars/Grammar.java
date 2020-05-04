@@ -192,6 +192,9 @@ public class Grammar {
 
     }
 
+    /**
+     * This method let us get the whole dead non terminals
+     */
     public void checkDeadNonTerminals() {
         for (int i = 0; i < leftSiders.size(); i++) {
             for (int j = 0; j < productions.size(); j++) {
@@ -202,6 +205,15 @@ public class Grammar {
                 }
             }
         }
+    }
+
+    public boolean isS() {
+        for (int i = 0; i < getProductions().size(); i++) {
+            if(getProductions().get(i).firstItemIsLambda()||!getProductions().get(i).firstItemIsTerminal()){
+                return false;
+            }
+        }
+        return true; 
     }
 
 }
