@@ -170,4 +170,38 @@ public class Grammar {
         nonTerminalsAlives.add(nonTerminal);
     }
 
+    /**
+     * This method will let us know when all the non terminals of the right side
+     * of a production are alive
+     *
+     * @param production The production to be evaluated
+     * @return True if all non terminals are alive, False if not
+     */
+    public boolean isProductionAllAlive(Production production) {
+        if (!production.nonTerminalsInRight().isEmpty()) {
+            for (int i = 0; i < production.nonTerminalsInRight().size(); i++) {
+                if (!isInsideAlives(production.nonTerminalsInRight().get(i))) {
+                    return false;
+                }
+            }
+        }
+        if (!isInsideAlives(production.getLeftSide())) {
+            addNonTerminalAlive(production.getLeftSide());
+        }
+        return true;
+
+    }
+
+    public void checkDeadNonTerminals() {
+        for (int i = 0; i < leftSiders.size(); i++) {
+            for (int j = 0; j < productions.size(); j++) {
+                if (isProductionAllAlive(productions.get(j))) {
+                    if (!isInsideAlives(productions.get(j).getLeftSide())) {
+                        addNonTerminalAlive(productions.get(j).getLeftSide());
+                    }
+                }
+            }
+        }
+    }
+
 }

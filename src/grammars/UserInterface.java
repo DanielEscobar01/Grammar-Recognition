@@ -338,8 +338,6 @@ public class UserInterface extends javax.swing.JFrame {
         rightSideAuxiliar = 0; // Reinitializing parameter
         grammar.addProduction(temporalProduction); // We are adding the production into the grammar
         this.newProduction.setVisible(false);
-        System.out.println(temporalProduction.getLeftSide().getClass().toString());
-        System.out.println(temporalProduction.getLeftSide().getClass().toString().equals("class grammars.NonTerminal"));
         temporalProduction = new Production(); // Reinitializing parameter
 
     }//GEN-LAST:event_newProductionMouseClicked
@@ -371,6 +369,7 @@ public class UserInterface extends javax.swing.JFrame {
             checkGrammar.setVisible(true);
             this.setVisible(false);          
         }
+        grammar.checkDeadNonTerminals();
     }//GEN-LAST:event_submitGrammarMouseClicked
 
     /**

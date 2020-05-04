@@ -18,6 +18,7 @@ public class CheckGrammar extends javax.swing.JFrame {
      */
     public CheckGrammar() {
         initComponents();
+        this.setResizable(false);
     }
 
     /**
@@ -29,24 +30,97 @@ public class CheckGrammar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel4 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        userString = new javax.swing.JTextField();
+        checkLabel = new javax.swing.JLabel();
+        check = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        status = new javax.swing.JLabel();
+        grammarType = new javax.swing.JLabel();
+
+        jLabel4.setText("jLabel4");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("String to recognize:");
+
+        checkLabel.setFont(new java.awt.Font("Monaco", 3, 36)); // NOI18N
+        checkLabel.setText("GRAMMAR RECOGNITION");
+
+        check.setFont(new java.awt.Font("Monaco", 3, 14)); // NOI18N
+        check.setText("CHECK");
+
+        jLabel2.setFont(new java.awt.Font("Monaco", 3, 24)); // NOI18N
+        jLabel2.setText("The string you check:");
+
+        jLabel3.setFont(new java.awt.Font("Monaco", 3, 24)); // NOI18N
+        jLabel3.setText("The grammar is:");
+
+        status.setFont(new java.awt.Font("Monaco", 3, 24)); // NOI18N
+        status.setText("is Correct");
+
+        grammarType.setFont(new java.awt.Font("Monaco", 3, 24)); // NOI18N
+        grammarType.setText("ll1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(checkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(77, 77, 77))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(userString, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)
+                        .addComponent(check, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(status))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(grammarType)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(checkLabel)
+                .addGap(80, 80, 80)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(userString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(check))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(grammarType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(status))
+                .addGap(67, 67, 67))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * This method let us set the grammar to be evaluated
+     * @param grammar The grammar to be used
+     */
     public void setGrammar(Grammar grammar){
-        
+        this.grammar=grammar;
     }
     
     /**
@@ -85,5 +159,14 @@ public class CheckGrammar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton check;
+    private javax.swing.JLabel checkLabel;
+    private javax.swing.JLabel grammarType;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel status;
+    private javax.swing.JTextField userString;
     // End of variables declaration//GEN-END:variables
 }
