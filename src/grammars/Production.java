@@ -118,5 +118,7 @@ public class Production {
     public boolean isRightSideAllTerminals(){
         return nonTerminalsInRight().isEmpty();
     }
+    
+    
 
 }
