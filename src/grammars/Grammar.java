@@ -207,13 +207,62 @@ public class Grammar {
         }
     }
 
+    /**
+     * This method let us know if the grammar is S
+     *
+     * @return True if the grammar is S, False if not.
+     */
     public boolean isS() {
         for (int i = 0; i < getProductions().size(); i++) {
-            if(getProductions().get(i).firstItemIsLambda()||!getProductions().get(i).firstItemIsTerminal()){
+            // S grammar, the first item of the right must be a terminal.
+            if (getProductions().get(i).firstItemIsLambda() || !getProductions().get(i).firstItemIsTerminal()) {
                 return false;
             }
         }
-        return true; 
+        return true;
     }
 
+    /**
+     * This method let us know if the grammar is Q or not
+     *
+     * @return True if the grammar is Q, False if not
+     */
+    public boolean isQ() {
+        boolean lambda = false;
+        //Q grammar, the first item of the right must be a terminal or lambda
+        for (int i = 0; i < getProductions().size(); i++) {
+            if (getProductions().get(i).firstItemIsLambda()) {
+                lambda = true;
+            }
+            if (!getProductions().get(i).firstItemIsTerminal()) {
+                return false;
+            }
+        }
+        // The Q grammar must have al least one production with lambda
+        return lambda == true;
+    }
+
+    /**
+     * This method let us know if the grammar is LL1 or not
+     *
+     * @return True if the grammar is LL1, False if not
+     */
+    public boolean isLL1() {
+        boolean lambda = false;
+        boolean nonTerminal = false;
+        boolean terminal = false;
+        for (int i = 0; i < getProductions().size(); i++) {
+            if (getProductions().get(i).firstItemIsLambda()) {
+                lambda = true;
+            }
+            if (getProductions().get(i).firstItemIsTerminal()) {
+                terminal = true;
+            } else {
+                nonTerminal = true;
+            }
+        }
+        // LL1 gramar must have at least one lambda production,one non terminal production and one terminal production 
+        return lambda == true && nonTerminal == true && terminal == true;
+    }
+    
 }
