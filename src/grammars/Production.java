@@ -18,6 +18,7 @@ public class Production {
     private NonTerminal leftSide;
     List<Object> rightSide = new ArrayList<>();
     List<NonTerminal> nonTerminalsInRight = new ArrayList<>();
+    List<Terminal> terminalsInRight = new ArrayList<>();
 
     /**
      * Constructor to create a empty production.
@@ -70,6 +71,9 @@ public class Production {
      */
     public void addElementRightSide(Terminal rightSide) {
         this.rightSide.add(rightSide);
+        if (rightSide.getSymbol() != 'λ') {
+            this.terminalsInRight.add(rightSide);
+        }
     }
 
     /**
@@ -117,6 +121,29 @@ public class Production {
      */
     public boolean isRightSideAllTerminals() {
         return nonTerminalsInRight().isEmpty();
+    }
+
+    /**
+     * This method let us know if the production is T-alpha
+     *
+     * @return True if the production is T-alpha, False if not
+     */
+    public boolean isTAlpha() {
+        if (firstItemIsTerminal()) {
+            if (firstItemIsLambda()) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * This method will return the terminals of the alpha part
+     * @return The list with all terminals of the alpha part
+     */
+    public List<Terminal> getTerminalsInRightAlpha(){
+        return this.terminalsInRight.subList(1, terminalsInRight.size()+1);
     }
 
 }

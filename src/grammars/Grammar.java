@@ -298,4 +298,24 @@ public class Grammar {
         return lambda == true && nonTerminal == true && terminal == true;
     }
 
+    /**
+     * This method will return the terminals in T-Alpha productions
+     * @return The list with terminals
+     */
+    public List<Terminal> terminalsInAlpha() {
+        List<Terminal> terminalsInAlpha = new ArrayList<>();
+        for (int i = 0; i < productions.size(); i++) {
+            if (productions.get(i).isTAlpha()) {
+                for (int j = 0; j < productions.get(i).getTerminalsInRightAlpha().size(); j++) {
+                    for (int k = 0; k < terminalsInAlpha.size(); k++) {
+                        if (!terminalsInAlpha.get(k).toString().equalsIgnoreCase(productions.get(i).getTerminalsInRightAlpha().get(j).toString())) {
+                            terminalsInAlpha.add(productions.get(i).getTerminalsInRightAlpha().get(j));
+                        }
+                    }
+                }
+            }
+        }
+        return terminalsInAlpha;
+    }
+    
 }
