@@ -300,6 +300,7 @@ public class Grammar {
 
     /**
      * This method will return the terminals in T-Alpha productions
+     *
      * @return The list with terminals
      */
     public List<Terminal> terminalsInAlpha() {
@@ -307,15 +308,20 @@ public class Grammar {
         for (int i = 0; i < productions.size(); i++) {
             if (productions.get(i).isTAlpha()) {
                 for (int j = 0; j < productions.get(i).getTerminalsInRightAlpha().size(); j++) {
-                    for (int k = 0; k < terminalsInAlpha.size(); k++) {
-                        if (!terminalsInAlpha.get(k).toString().equalsIgnoreCase(productions.get(i).getTerminalsInRightAlpha().get(j).toString())) {
-                            terminalsInAlpha.add(productions.get(i).getTerminalsInRightAlpha().get(j));
+                    if (terminalsInAlpha.isEmpty()) {
+                        terminalsInAlpha.add(productions.get(i).getTerminalsInRightAlpha().get(j));
+                    } else {
+                        for (int k = 0; k < terminalsInAlpha.size(); k++) {
+                            if (!terminalsInAlpha.get(k).toString().equalsIgnoreCase(productions.get(i).getTerminalsInRightAlpha().get(j).toString())) {
+                                terminalsInAlpha.add(productions.get(i).getTerminalsInRightAlpha().get(j));
+                            }
                         }
                     }
+
                 }
             }
         }
         return terminalsInAlpha;
     }
-    
+
 }

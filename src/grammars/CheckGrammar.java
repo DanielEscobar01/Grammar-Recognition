@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -158,25 +159,37 @@ public class CheckGrammar extends javax.swing.JFrame {
         this.terminals = grammar.getTerminals();
         this.nonTerminals = grammar.getLeftSiders();
         this.stack.push(grammar.getProductions().get(0).getLeftSide());
-        nothing();
+        fillTableBasics();
     }
 
-    public void nothing() {
+    /**
+     * This method let us fill the table with the right elements
+     */
+    public void fillTableBasics() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.addColumn("In Stack");
+        TableColumnModel n = table.getColumnModel();
+        
         for (int i = 0; i < this.terminals.size(); i++) {
             // CON ESTA AÑADIMOS EL RESTO DE COLUMNAS
             model.addColumn(terminals.get(i).toString());
         }
         //CREAMOS VECTOR PARA LLENAR TABLA VACIA
-        String[] x = new String[terminals.size()+1];
-        /*for (int i = 0; i < filas; i++) {
+        String[] x = new String[terminals.size() + 1];
+        int rows = grammar.terminalsInAlpha().size() + grammar.getLeftSiders().size();
+        for (int i = 0; i <= rows; i++) {
             model.addRow(x);
         }
-
-        for (int i = 0; i < filas; i++) {
-            model.setValueAt(i + 1, i, 0);
+        int j=0;
+        for (int i = 0; i < rows; i++) {
+            if (i < grammar.getLeftSiders().size()) {
+                model.setValueAt(grammar.getLeftSiders().get(i).toString(), i, 0);
+            } else {
+                model.setValueAt(grammar.terminalsInAlpha().get(j).toString(), i, 0);
+                j++;
+            }
         }
-        */
+        model.setValueAt("▼", rows, 0);
     }
 
     /**

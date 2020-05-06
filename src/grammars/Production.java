@@ -129,21 +129,23 @@ public class Production {
      * @return True if the production is T-alpha, False if not
      */
     public boolean isTAlpha() {
+        boolean isAlpha= false;
         if (firstItemIsTerminal()) {
+            isAlpha=true;
             if (firstItemIsLambda()) {
-                return false;
+                isAlpha= false;
             }
-            return true;
         }
-        return false;
+        return isAlpha;
     }
-    
+
     /**
      * This method will return the terminals of the alpha part
+     *
      * @return The list with all terminals of the alpha part
      */
-    public List<Terminal> getTerminalsInRightAlpha(){
-        return this.terminalsInRight.subList(1, terminalsInRight.size()+1);
+    public List<Terminal> getTerminalsInRightAlpha() {
+        return this.terminalsInRight.subList(1, terminalsInRight.size());
     }
 
 }
