@@ -18,6 +18,7 @@ public class Grammar {
     private List<Production> productions = new ArrayList<>();
     private List<NonTerminal> leftSiders = new ArrayList<>();
     private List<NonTerminal> nonTerminalsAlives = new ArrayList<>();
+    private List<Terminal> terminals = new ArrayList<>();
 
     /**
      * Constructor to create a grammar without any productions
@@ -33,6 +34,38 @@ public class Grammar {
      */
     public Grammar(Production initialProduction) {
         this.productions.add(initialProduction);
+    }
+
+    /**
+     * This method let us add a terminal into a list for later use in stack
+     *
+     * @param terminal The terminal to be added
+     */
+    public void addTerminal(Terminal terminal) {
+        if (terminals.isEmpty()) {
+            terminals.add(terminal);
+        } else {
+            boolean exist = false;
+            for (int i = 0; i < terminals.size(); i++) {
+                if (terminal.getSymbol() == terminals.get(i).getSymbol()) {
+                    exist = true;
+                }
+            }
+            if (exist == false) {
+                terminals.add(terminal);
+            }
+        }
+    }
+
+    /**
+     * This method let us get the list of terminals
+     *
+     * @return The list with all terminals
+     */
+    public List<Terminal> getTerminals() {
+        Terminal terminal = new Terminal('┐');
+        terminals.add(terminal);
+        return this.terminals;
     }
 
     /**
@@ -98,7 +131,7 @@ public class Grammar {
             for (int i = 0; i < namesRight.size(); i++) {
                 int flag = 0; // 0 means it didnt find the terminal in left
                 for (int j = 0; j < namesLeft.size(); j++) {
-                    if (namesRight.get(i).equals(namesLeft.get(j))) {
+                    if (namesRight.get(i).equalsIgnoreCase(namesLeft.get(j))) {
                         flag = 1;
                     }
                 }
@@ -264,5 +297,5 @@ public class Grammar {
         // LL1 gramar must have at least one lambda production,one non terminal production and one terminal production 
         return lambda == true && nonTerminal == true && terminal == true;
     }
-    
+
 }

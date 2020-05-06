@@ -285,6 +285,7 @@ public class UserInterface extends javax.swing.JFrame {
             model.addRow(new Object[]{leftSide, "--->", rightSide});
             Terminal terminal = new Terminal(terminalRight.getText().charAt(0));// We create a terminal
             temporalProduction.addElementRightSide(terminal); // Add terminal to production in right side
+            grammar.addTerminal(terminal); // We add terminal to a list for later use in stack
             addLambda.setVisible(false);// Hide lambda value if the user put another symbol in the production
         } else {
             JOptionPane.showMessageDialog(null, "You have to input");
