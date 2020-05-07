@@ -95,6 +95,38 @@ public class Production {
     }
 
     /**
+     * This method will return the first item when it is non terminal
+     *
+     * @return The non terminal in the right side
+     */
+    public NonTerminal firstItemNonTerminal() {
+        return (NonTerminal) rightSide.get(0);
+    }
+
+    /**
+     * This method will return the first item when it is terminal
+     *
+     * @return The terminal in the right side
+     */
+    public Terminal firstItemTerminal() {
+        return (Terminal) rightSide.get(0);
+    }
+
+    /**
+     * This method let us know if the first item is a terminal different than
+     * lambda
+     *
+     * @return True if the first item is terminal, otherwise return False
+     */
+    public boolean firstItemIsTerminalNotLambda() {
+        if (firstItemIsLambda()) {
+            return false;
+        } else {
+            return firstItemIsTerminal();
+        }
+    }
+
+    /**
      * This method let us know if the first item of the right side is lambda
      *
      * @return True if the first element is lambda, otherwise returns False
@@ -129,11 +161,11 @@ public class Production {
      * @return True if the production is T-alpha, False if not
      */
     public boolean isTAlpha() {
-        boolean isAlpha= false;
+        boolean isAlpha = false;
         if (firstItemIsTerminal()) {
-            isAlpha=true;
+            isAlpha = true;
             if (firstItemIsLambda()) {
-                isAlpha= false;
+                isAlpha = false;
             }
         }
         return isAlpha;

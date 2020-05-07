@@ -192,6 +192,10 @@ public class CheckGrammar extends javax.swing.JFrame {
         model.setValueAt("▼", rows, 0);
     }
 
+    public void isCorrect(){
+        
+    }
+    
     /**
      * @param args the command line arguments
      */

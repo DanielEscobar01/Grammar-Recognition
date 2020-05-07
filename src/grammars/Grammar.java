@@ -324,4 +324,19 @@ public class Grammar {
         return terminalsInAlpha;
     }
 
+    public void nn(NonTerminal nonTerminal, Character inputSymbol) {
+        List<Object> alphaReverse = new ArrayList<>();
+        for (int i = 0; i < productions.size(); i++) {
+            if (productions.get(i).getLeftSide().getID().equals(nonTerminal.getID())) {
+                if (productions.get(i).firstItemIsTerminalNotLambda()) {
+                    if (productions.get(i).firstItemTerminal().getSymbol() == inputSymbol) {
+                        for (int j = productions.get(i).rightSide.size()-1; j >= 1; j--) {
+                            alphaReverse.add(productions.get(i).rightSide.get(j));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
