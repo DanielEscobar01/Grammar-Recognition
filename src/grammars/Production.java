@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class Production {
 
+    
     private NonTerminal leftSide;
     List<Object> rightSide = new ArrayList<>();
     List<NonTerminal> nonTerminalsInRight = new ArrayList<>();
