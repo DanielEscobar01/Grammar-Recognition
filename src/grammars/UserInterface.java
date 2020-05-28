@@ -370,28 +370,28 @@ public class UserInterface extends javax.swing.JFrame {
             checkGrammar.setGrammar(grammar);
             Recognizer r = new Recognizer(grammar);
             System.out.println("Non Terminals Voidables");
-            for(NonTerminal nonTerminal : r.nonTerminalsVoidables){
+            for(NonTerminal nonTerminal : r.getNonTerminalsVoidables()){
                 System.out.println("Non terminal --- " + nonTerminal.toString());
             }
             System.out.println("Productions Voidables");
-            for(Integer nonTerminal : r.ProductionVoidables){
+            for(Integer nonTerminal : r.getProductionVoidables()){
                 System.out.println("Production --- " + nonTerminal);
             }
             System.out.println("Firsts to non terminals");
             for(NonTerminal nonTerminal : grammar.getLeftSiders()){
-                System.out.println(nonTerminal.getID() + " --- " + r.firstsNonTerminal.get(nonTerminal.getID()));
+                System.out.println(nonTerminal.getID() + " --- " + r.getFirstsNonTerminal().get(nonTerminal.getID()));
             }
             System.out.println("Firsts to productions");
             for(int i = 0;i<grammar.getProductions().size();i++){
-                System.out.println("Production "+String.valueOf(i) + " --- " + r.firstsProduction.get(i));
+                System.out.println("Production "+String.valueOf(i) + " --- " + r.getFirstsProduction().get(i));
             }
             System.out.println("Afters to non terminal");
             for(NonTerminal nonTerminal : grammar.getLeftSiders()){
-                System.out.println("Non terminal "+nonTerminal.getID() + " --- " + r.aftersNonTerminal.get(nonTerminal.getID()));
+                System.out.println("Non terminal "+nonTerminal.getID() + " --- " + r.getAftersNonTerminal().get(nonTerminal.getID()));
             }
             System.out.println("Set Select");
             for(int i = 0;i<grammar.getProductions().size();i++){
-                System.out.println("Production " + String.valueOf(i) + " --- " + r.selectionProduction.get(i));
+                System.out.println("Production " + String.valueOf(i) + " --- " + r.getSelectionProduction().get(i));
             }
             checkGrammar.setVisible(true);
             this.setVisible(false);          

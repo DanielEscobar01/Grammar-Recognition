@@ -15,13 +15,13 @@ import java.util.List;
  */
 public final class Recognizer {
 
-    Grammar grammar;
-    List<NonTerminal> nonTerminalsVoidables = new ArrayList<>();
-    List<Integer> ProductionVoidables = new ArrayList<>();
-    HashMap<String, List<Terminal>> firstsNonTerminal = new HashMap<>();
-    HashMap<Integer, List<Terminal>> firstsProduction = new HashMap<>();
-    HashMap<String, List<Terminal>> aftersNonTerminal = new HashMap<>();
-    HashMap<Integer, List<Terminal>> selectionProduction = new HashMap<>();
+    private final Grammar grammar;
+    private final List<NonTerminal> nonTerminalsVoidables = new ArrayList<>();
+    private final List<Integer> ProductionVoidables = new ArrayList<>();
+    private final HashMap<String, List<Terminal>> firstsNonTerminal = new HashMap<>();
+    private final HashMap<Integer, List<Terminal>> firstsProduction = new HashMap<>();
+    private final HashMap<String, List<Terminal>> aftersNonTerminal = new HashMap<>();
+    private final HashMap<Integer, List<Terminal>> selectionProduction = new HashMap<>();
 
     public Recognizer(Grammar grammar) {
         this.grammar = grammar;
@@ -32,39 +32,48 @@ public final class Recognizer {
         foundAftersNonTerminal();
         foundSetSelect();
     }
-
+    
+    
+    /* Metodo que recorre todos los no terminales preguntando si son anulables */
     private void foundNonTerminalVoidables() {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
             if (this.isNonTerminalVoidable(nonTerminal)) {
                 boolean contains = false;
-                for (NonTerminal nonTerminal2 : nonTerminalsVoidables) {
+                for (NonTerminal nonTerminal2 : getNonTerminalsVoidables()) {
                     if (nonTerminal2.getID().equals(nonTerminal.getID())) {
                         contains = true;
                         break;
                     }
                 }
                 if (!contains) {
-                    nonTerminalsVoidables.add(nonTerminal);
+                    getNonTerminalsVoidables().add(nonTerminal);
                 }
             }
         }
     }
 
+    /* Metodo que se encarga de determinar si un no terminal es anulable */
     private boolean isNonTerminalVoidable(NonTerminal nonTerminal) {
         String idNonTerminal = nonTerminal.getID();
         boolean isVoidable = false;
+        /* Se recorren todas las producciones preguntando si el lado izquierdo es igual al no terminal que se recibio como parametro */
         for (Production production : grammar.getProductions()) {
             if (production.getLeftSide().getID().equals(idNonTerminal)) {
                 if (production.firstItemIsLambda()) {
                     isVoidable = true;
                 } else {
+                    /* Si la produccion no es lambda, se pregunta si todo el lado derecho de la produccion son No terminales */
                     if (production.terminalsInRight.isEmpty()) {
                         boolean auxiliar = false;
+                        /* Se recorren todos los terminales del lado derecho preguntando 
+                        si alguno es igual al no terminal que se recibio como parametro para evitar ciclos infinitos*/
                         for (NonTerminal nonTerminalP : production.nonTerminalsInRight) {
                             if (nonTerminalP.getID().equals(nonTerminal.getID())) {
                                 auxiliar = false;
                                 break;
                             }
+                            /* En caso de que los terminales no sean iguales al no terminal que se recibio como parametro
+                            se procede a llamar recursivamente al metodo para determinar si son anulables */
                             auxiliar = this.isNonTerminalVoidable(nonTerminalP);
                         }
                         isVoidable = auxiliar;
@@ -75,11 +84,12 @@ public final class Recognizer {
         return isVoidable;
     }
 
+    /* Metodo que recorre todas las producciones determinando si son anulables*/
     private void foundProductionVoidables() {
         int j = 0;
         for (Production production : grammar.getProductions()) {
             if (production.firstItemIsLambda()) {
-                ProductionVoidables.add(j);
+                getProductionVoidables().add(j);
             } else {
                 if (production.isRightSideAllNotTerminals()) {
                     int i = 0;
@@ -94,7 +104,7 @@ public final class Recognizer {
                         }
                     }
                     if (!auxiliar) {
-                        ProductionVoidables.add(j);
+                        getProductionVoidables().add(j);
                     }
                 }
             }
@@ -102,9 +112,11 @@ public final class Recognizer {
         }
     }
 
+    /* Metodo que recorre todos los no terminales para obtener el conjunto de primeros de cada uno */
     private void foundFirstsToNonTerminal() {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
             List<Terminal> firsts = this.FirstsToNonTerminal(nonTerminal);
+            /* Ciclo encargado de eliminar terminales duplicados */
             for (int j = 0; j < firsts.size(); j++) {
                 int k = j + 1;
                 while (k < firsts.size()) {
@@ -115,10 +127,12 @@ public final class Recognizer {
                     k++;
                 }
             }
-            firstsNonTerminal.put(nonTerminal.getID(), firsts);
+            /* Despues de eliminar los duplicados se agrega el conjunto */
+            getFirstsNonTerminal().put(nonTerminal.getID(), firsts);
         }
     }
 
+    /* Metodo que busca el conjunto de primeros de un no terminal */
     private List<Terminal> FirstsToNonTerminal(NonTerminal nonTerminal) {
         String idNonTerminal = nonTerminal.getID();
         List<Terminal> firsts = new ArrayList<>();
@@ -133,7 +147,7 @@ public final class Recognizer {
                         }
                         firsts.addAll(this.FirstsToNonTerminal(production.firstItemNonTerminal()));
                         boolean contains = false;
-                        for (NonTerminal nonTerminalP : this.nonTerminalsVoidables) {
+                        for (NonTerminal nonTerminalP : this.getNonTerminalsVoidables()) {
                             if (production.firstItemNonTerminal().getID().equals(nonTerminalP.getID())) {
                                 contains = true;
                                 break;
@@ -163,10 +177,12 @@ public final class Recognizer {
         return firsts;
     }
 
+    /* Metodo que recorre todas las producciones para obtener el conjunto de primeros de cada una */
     private void foundFirstsToProduction() {
         int i = 0;
         for (Production production : grammar.getProductions()) {
             List<Terminal> firsts = this.FirstsToProduction(production);
+            /* Ciclo encargado de eliminar terminales duplicados */
             for (int j = 0; j < firsts.size(); j++) {
                 int k = j + 1;
                 while (k < firsts.size()) {
@@ -177,20 +193,22 @@ public final class Recognizer {
                     k++;
                 }
             }
-            this.firstsProduction.put(i, firsts);
+            /* Despues de eliminar los duplicados se agrega el conjunto */
+            this.getFirstsProduction().put(i, firsts);
             i++;
         }
     }
 
+    /* Metodo que busca el conjunto de primeros de una produccion */
     private List<Terminal> FirstsToProduction(Production production) {
         List<Terminal> firsts = new ArrayList<>();
         if (!production.firstItemIsLambda()) {
             if (production.firstItemIsTerminal()) {
                 firsts.add(production.firstItemTerminal());
             } else {
-                firsts.addAll(this.firstsNonTerminal.get(production.firstItemNonTerminal().getID()));
+                firsts.addAll(this.getFirstsNonTerminal().get(production.firstItemNonTerminal().getID()));
                 boolean contains = false;
-                for (NonTerminal nonTerminalP : this.nonTerminalsVoidables) {
+                for (NonTerminal nonTerminalP : this.getNonTerminalsVoidables()) {
                     if (production.firstItemNonTerminal().getID().equals(nonTerminalP.getID())) {
                         contains = true;
                         break;
@@ -214,7 +232,28 @@ public final class Recognizer {
         }
         return firsts;
     }
+    
+    /* Metodo que recorre todos los no terminales para obtener el conjunto de siguientes de cada uno */
+    private void foundAftersNonTerminal() {
+        for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
+            List<Terminal> afters = this.aftersToNonTerminal(nonTerminal);
+            /* Ciclo encargado de eliminar terminales duplicados */
+            for (int i = 0; i < afters.size(); i++) {
+                int j = i+1;
+                while (j < afters.size()) {
+                    if (afters.get(i).getSymbol() == afters.get(j).getSymbol() && i!=j) {
+                        afters.remove(j);
+                        continue;
+                    }
+                    j++;
+                }
+            }
+            /* Despues de eliminar los duplicados se agrega el conjunto */
+            this.getAftersNonTerminal().put(nonTerminal.getID(), afters);
+        }
+    }
 
+    /* Metodo que busca el conjunto de siguientes de un no terminal */
     private List<Terminal> aftersToNonTerminal(NonTerminal nonTerminal) {
         String idNonTerminal = nonTerminal.getID();
         List<Terminal> afters = new ArrayList<>();
@@ -258,9 +297,9 @@ public final class Recognizer {
                         afters.add(productionAuxiliar.firstItemTerminal());
                         break;
                     } else {
-                        afters.addAll(this.firstsNonTerminal.get(productionAuxiliar.firstItemNonTerminal().getID()));
+                        afters.addAll(this.getFirstsNonTerminal().get(productionAuxiliar.firstItemNonTerminal().getID()));
                         boolean contains = false;
-                        for (NonTerminal noTerminalV : this.nonTerminalsVoidables) {
+                        for (NonTerminal noTerminalV : this.getNonTerminalsVoidables()) {
                             if (noTerminalV.getID().equals(productionAuxiliar.firstItemNonTerminal().getID())) {
                                 contains = true;
                             }
@@ -283,34 +322,60 @@ public final class Recognizer {
         return afters;
     }
 
-    private void foundAftersNonTerminal() {
-        for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
-            List<Terminal> afters = this.aftersToNonTerminal(nonTerminal);
-            for (int i = 0; i < afters.size(); i++) {
-                int j = i+1;
-                while (j < afters.size()) {
-                    if (afters.get(i).getSymbol() == afters.get(j).getSymbol() && i!=j) {
-                        afters.remove(j);
-                        continue;
-                    }
-                    j++;
-                }
-            }
-            this.aftersNonTerminal.put(nonTerminal.getID(), afters);
-        }
-    }
-
+    /* Metodo que determina el conjunto de seleccion de cada produccion*/
     private void foundSetSelect() {
         int i = 0;
         for (Production production : grammar.getProductions()) {
             List<Terminal> select = new ArrayList<>();
-            select.addAll(this.firstsProduction.get(i));
-            if (this.ProductionVoidables.contains(i)) {
-                select.addAll(this.aftersNonTerminal.get(production.getLeftSide().getID()));
+            select.addAll(this.getFirstsProduction().get(i));
+            if (this.getProductionVoidables().contains(i)) {
+                select.addAll(this.getAftersNonTerminal().get(production.getLeftSide().getID()));
             }
-            selectionProduction.put(i, select);
+            getSelectionProduction().put(i, select);
             i++;
         }
+    }
+
+    /**
+     * @return the nonTerminalsVoidables
+     */
+    public List<NonTerminal> getNonTerminalsVoidables() {
+        return nonTerminalsVoidables;
+    }
+
+    /**
+     * @return the ProductionVoidables
+     */
+    public List<Integer> getProductionVoidables() {
+        return ProductionVoidables;
+    }
+
+    /**
+     * @return the firstsNonTerminal
+     */
+    public HashMap<String, List<Terminal>> getFirstsNonTerminal() {
+        return firstsNonTerminal;
+    }
+
+    /**
+     * @return the firstsProduction
+     */
+    public HashMap<Integer, List<Terminal>> getFirstsProduction() {
+        return firstsProduction;
+    }
+
+    /**
+     * @return the aftersNonTerminal
+     */
+    public HashMap<String, List<Terminal>> getAftersNonTerminal() {
+        return aftersNonTerminal;
+    }
+
+    /**
+     * @return the selectionProduction
+     */
+    public HashMap<Integer, List<Terminal>> getSelectionProduction() {
+        return selectionProduction;
     }
 
 }
