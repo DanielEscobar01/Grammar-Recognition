@@ -107,12 +107,12 @@ public final class Recognizer {
             List<Terminal> firsts = this.FirstsToNonTerminal(nonTerminal);
             for (int j = 0; j < firsts.size(); j++) {
                 int k = j + 1;
-                while (k < firsts.size()-1) {
-                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol()) {
+                while (k < firsts.size()) {
+                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol() && j!=k) {
                         firsts.remove(k);
                         continue;
                     }
-                    j++;
+                    k++;
                 }
             }
             firstsNonTerminal.put(nonTerminal.getID(), firsts);
@@ -169,12 +169,12 @@ public final class Recognizer {
             List<Terminal> firsts = this.FirstsToProduction(production);
             for (int j = 0; j < firsts.size(); j++) {
                 int k = j + 1;
-                while (k < firsts.size() - 1) {
-                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol()) {
+                while (k < firsts.size()) {
+                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol() && j!=k) {
                         firsts.remove(k);
                         continue;
                     }
-                    j++;
+                    k++;
                 }
             }
             this.firstsProduction.put(i, firsts);
@@ -219,7 +219,7 @@ public final class Recognizer {
         String idNonTerminal = nonTerminal.getID();
         List<Terminal> afters = new ArrayList<>();
         if (grammar.getProductions().get(0).getLeftSide().getID().equals(idNonTerminal)) {
-            Terminal fin = new Terminal('|');
+            Terminal fin = new Terminal('┐');
             afters.add(fin);
         }
         for (Production production : grammar.getProductions()) {
@@ -287,9 +287,9 @@ public final class Recognizer {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
             List<Terminal> afters = this.aftersToNonTerminal(nonTerminal);
             for (int i = 0; i < afters.size(); i++) {
-                int j = i + 1;
-                while (j < afters.size() - 1) {
-                    if (afters.get(i).getSymbol() == afters.get(j).getSymbol()) {
+                int j = i+1;
+                while (j < afters.size()) {
+                    if (afters.get(i).getSymbol() == afters.get(j).getSymbol() && i!=j) {
                         afters.remove(j);
                         continue;
                     }
