@@ -389,6 +389,10 @@ public class UserInterface extends javax.swing.JFrame {
             for(NonTerminal nonTerminal : grammar.getLeftSiders()){
                 System.out.println("Non terminal "+nonTerminal.getID() + " --- " + r.aftersNonTerminal.get(nonTerminal.getID()));
             }
+            System.out.println("Set Select");
+            for(int i = 0;i<grammar.getProductions().size();i++){
+                System.out.println("Production " + String.valueOf(i) + " --- " + r.selectionProduction.get(i));
+            }
             checkGrammar.setVisible(true);
             this.setVisible(false);          
         }

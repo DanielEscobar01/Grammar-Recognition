@@ -88,7 +88,7 @@ public final class Recognizer {
                         if (!this.isNonTerminalVoidable(production.nonTerminalsInRight.get(i))) {
                             auxiliar = true;
                             break;
-                            
+
                         } else {
                             i++;
                         }
@@ -104,7 +104,18 @@ public final class Recognizer {
 
     private void foundFirstsToNonTerminal() {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
-            firstsNonTerminal.put(nonTerminal.getID(), this.FirstsToNonTerminal(nonTerminal));
+            List<Terminal> firsts = this.FirstsToNonTerminal(nonTerminal);
+            for (int j = 0; j < firsts.size(); j++) {
+                int k = j + 1;
+                while (k < firsts.size()-1) {
+                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol()) {
+                        firsts.remove(k);
+                        continue;
+                    }
+                    j++;
+                }
+            }
+            firstsNonTerminal.put(nonTerminal.getID(), firsts);
         }
     }
 
@@ -155,38 +166,53 @@ public final class Recognizer {
     private void foundFirstsToProduction() {
         int i = 0;
         for (Production production : grammar.getProductions()) {
-            List<Terminal> firsts = new ArrayList<>();
-            if (!production.firstItemIsLambda()) {
-                if (production.firstItemIsTerminal()) {
-                    firsts.add(production.firstItemTerminal());
-                } else {
-                    firsts.addAll(this.firstsNonTerminal.get(production.firstItemNonTerminal().getID()));
-                    boolean contains = false;
-                    for (NonTerminal nonTerminalP : this.nonTerminalsVoidables) {
-                        if (production.firstItemNonTerminal().getID().equals(nonTerminalP.getID())) {
-                            contains = true;
-                            break;
-                        }
+            List<Terminal> firsts = this.FirstsToProduction(production);
+            for (int j = 0; j < firsts.size(); j++) {
+                int k = j + 1;
+                while (k < firsts.size() - 1) {
+                    if (firsts.get(j).getSymbol() == firsts.get(k).getSymbol()) {
+                        firsts.remove(k);
+                        continue;
                     }
-                    if (contains) {
-                        Production productionAuxiliar = new Production();
-                        for (int j = 0; j < production.rightSide.size(); j++) {
-                            productionAuxiliar.rightSide.add(production.rightSide.get(j));
-                        }
-                        productionAuxiliar.rightSide.remove(0);
-                        if (productionAuxiliar.rightSide.size() > 0) {
-                            if (productionAuxiliar.firstItemIsTerminal()) {
-                                firsts.add(productionAuxiliar.firstItemTerminal());
-                            } else {
-                                firsts.addAll(this.FirstsToNonTerminal(productionAuxiliar.firstItemNonTerminal()));
-                            }
+                    j++;
+                }
+            }
+            this.firstsProduction.put(i, firsts);
+            i++;
+        }
+    }
+
+    private List<Terminal> FirstsToProduction(Production production) {
+        List<Terminal> firsts = new ArrayList<>();
+        if (!production.firstItemIsLambda()) {
+            if (production.firstItemIsTerminal()) {
+                firsts.add(production.firstItemTerminal());
+            } else {
+                firsts.addAll(this.firstsNonTerminal.get(production.firstItemNonTerminal().getID()));
+                boolean contains = false;
+                for (NonTerminal nonTerminalP : this.nonTerminalsVoidables) {
+                    if (production.firstItemNonTerminal().getID().equals(nonTerminalP.getID())) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (contains) {
+                    Production productionAuxiliar = new Production();
+                    for (int j = 0; j < production.rightSide.size(); j++) {
+                        productionAuxiliar.rightSide.add(production.rightSide.get(j));
+                    }
+                    productionAuxiliar.rightSide.remove(0);
+                    if (productionAuxiliar.rightSide.size() > 0) {
+                        if (productionAuxiliar.firstItemIsTerminal()) {
+                            firsts.add(productionAuxiliar.firstItemTerminal());
+                        } else {
+                            firsts.addAll(this.FirstsToNonTerminal(productionAuxiliar.firstItemNonTerminal()));
                         }
                     }
                 }
             }
-            firstsProduction.put(i, firsts);
-            i++;
         }
+        return firsts;
     }
 
     private List<Terminal> aftersToNonTerminal(NonTerminal nonTerminal) {
@@ -259,16 +285,27 @@ public final class Recognizer {
 
     private void foundAftersNonTerminal() {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
-            this.aftersNonTerminal.put(nonTerminal.getID(), this.aftersToNonTerminal(nonTerminal));
+            List<Terminal> afters = this.aftersToNonTerminal(nonTerminal);
+            for (int i = 0; i < afters.size(); i++) {
+                int j = i + 1;
+                while (j < afters.size() - 1) {
+                    if (afters.get(i).getSymbol() == afters.get(j).getSymbol()) {
+                        afters.remove(j);
+                        continue;
+                    }
+                    j++;
+                }
+            }
+            this.aftersNonTerminal.put(nonTerminal.getID(), afters);
         }
     }
-    
-    private void foundSetSelect(){
-        int i=0;
-        for(Production production : grammar.getProductions()){
+
+    private void foundSetSelect() {
+        int i = 0;
+        for (Production production : grammar.getProductions()) {
             List<Terminal> select = new ArrayList<>();
             select.addAll(this.firstsProduction.get(i));
-            if(this.ProductionVoidables.contains(i)){
+            if (this.ProductionVoidables.contains(i)) {
                 select.addAll(this.aftersNonTerminal.get(production.getLeftSide().getID()));
             }
             selectionProduction.put(i, select);
