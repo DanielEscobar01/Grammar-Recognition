@@ -27,6 +27,9 @@ public class CheckGrammar extends javax.swing.JFrame {
      */
     public CheckGrammar() {
         initComponents();
+        if(grammar.isS()) this.grammarType.setText("S");
+        if(grammar.isQ()) this.grammarType.setText("Q");
+        if(grammar.isLL1()) this.grammarType.setText("LL1");
         this.setResizable(false);
         this.table.setEnabled(false);
         this.table.getTableHeader().setResizingAllowed(false);
@@ -52,6 +55,8 @@ public class CheckGrammar extends javax.swing.JFrame {
         grammarType = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
 
         jLabel4.setText("jLabel4");
 
@@ -88,6 +93,8 @@ public class CheckGrammar extends javax.swing.JFrame {
         table.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(table);
 
+        jScrollPane2.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,42 +103,47 @@ public class CheckGrammar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(status))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(grammarType))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(userString, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addComponent(check, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(checkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(77, 77, 77))))
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(status))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(grammarType)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(210, 210, 210)
+                .addComponent(checkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(40, 40, 40)
                 .addComponent(checkLabel)
-                .addGap(46, 46, 46)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(userString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(check)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -184,10 +196,123 @@ public class CheckGrammar extends javax.swing.JFrame {
             } else {
                 model.setValueAt(grammar.terminalsInAlpha().get(j).toString(), i, 0);
                 j++;
-                
             }
         }
+       
+             
+        //Set for the SetSelection of each N
+        Recognizer a =  new Recognizer(grammar);
+        List<Terminal> terminals = new ArrayList<>();
+     
+        
+        //SE LLENA LA TABLA CON LAS OPERACIONES CORRESPONDIENTES
+        
+        int k = 1;
+        String b = "#"+k;
+        int m = grammar.getProductions().size();
+        int i = 0;
+        int row = 0;
+        int indexOfColumn;
+        
+        indexOfColumn = returnColumn(model,"¬");
+        model.setValueAt("Acepte", model.getRowCount()-1, model.getColumnCount()-1);
+        
+        String currentN;
+        while(i<m){
+            
+        
+            currentN = grammar.getProductions().get(i).getLeftSide().toString();
+            terminals = a.getSelectionProduction().get(i);      
+            for(int s = 0; s < terminals.size();s++){
+                indexOfColumn = returnColumn(model,terminals.get(s).toString());
+                model.setValueAt(b,row,indexOfColumn);              
+            }
+            
+            if((i+1)<m){
+            if(!grammar.getProductions().get(i+1).getLeftSide().toString().equals(currentN)){
+                row++;
+               
+            }}
+            
+            String operation = toStringRightSide(i);
+            
+            
+            String h = b+": "+getTransition(operation);
+            jTextPane1.setText(jTextPane1.getText()+"\n"+h);
+            
+            
+            b = b.substring(0,1);
+            k++;
+            b = b+k;
+            i++;
+           
+            //System.out.println(grammar.getLeftSiders().get(i).toString());
+            //System.out.println(productions.get(i).rightSide);
+        }
+        System.out.println("\n");
         model.setValueAt("▼", rows, 0);
+        /*
+        for(int i = 0;i < grammar.getProductions().size();i++){
+            System.out.println(grammar.getProductions().get(i).getLeftSide().toString());
+        }
+       
+        */
+        
+        
+    }
+    public String toStringRightSide(int position){
+        
+        List<Production> productions = new ArrayList<>();
+        productions = grammar.getProductions();
+        
+        return productions.get(position).rightSide.toString();
+    
+    }
+    
+    public String getTransition(String operation){
+        
+        
+        String finalTransition = reverseTransition(operation);
+        
+        if(operation.charAt(1)=='<') return " Replace ("+finalTransition+")"+" , "+" retenga";
+        if(operation.equals("[λ]")) return " Desapile, retenga";
+        if(operation.length()==3) return " Desapile, avance";
+        return " Replace ("+finalTransition.substring(0, finalTransition.length()-1)+")"+" , "+" avance";
+    
+    }
+    
+    
+    public String reverseTransition(String transition){
+        
+        
+        String answer = "";
+        char[] v = transition.toCharArray();
+        for(int i = transition.length()-1;i > 0;i--){
+           
+            if(v[i] == '[') continue;
+            if(v[i] == ',') continue;
+            if(v[i] == ' ') continue;
+            if(v[i] == ']') continue;
+            if(v[i] == '<'){
+                answer = answer+">";
+            }else{
+            if(v[i] == '>'){
+                answer = answer+"<";
+            }else{
+            answer = answer + String.valueOf(v[i]);
+            }          
+        }
+        }   
+    return answer;
+    }
+    
+    
+    public int returnColumn(DefaultTableModel model, String terminal){
+        
+        for(int i=0;i < model.getColumnCount();i++){
+            if(model.getColumnName(i).equals(terminal)) return i;
+        }   
+    return 0;
     }
 
     public void isCorrect(){
@@ -238,6 +363,8 @@ public class CheckGrammar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel status;
     private javax.swing.JTable table;
     private javax.swing.JTextField userString;
