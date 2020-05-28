@@ -269,6 +269,7 @@ public class CheckGrammar extends javax.swing.JFrame {
     
     }
     
+    
     public String getTransition(String operation){
         
         
