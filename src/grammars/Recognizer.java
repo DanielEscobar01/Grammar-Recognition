@@ -21,7 +21,7 @@ public final class Recognizer {
     HashMap<String, List<Terminal>> firstsNonTerminal = new HashMap<>();
     HashMap<Integer, List<Terminal>> firstsProduction = new HashMap<>();
     HashMap<String, List<Terminal>> aftersNonTerminal = new HashMap<>();
-    List<Terminal> selectionProduction = new ArrayList<>();
+    HashMap<Integer, List<Terminal>> selectionProduction = new HashMap<>();
 
     public Recognizer(Grammar grammar) {
         this.grammar = grammar;
@@ -30,6 +30,7 @@ public final class Recognizer {
         foundFirstsToNonTerminal();
         foundFirstsToProduction();
         foundAftersNonTerminal();
+        foundSetSelect();
     }
 
     private void foundNonTerminalVoidables() {
@@ -259,6 +260,19 @@ public final class Recognizer {
     private void foundAftersNonTerminal() {
         for (NonTerminal nonTerminal : grammar.getLeftSiders()) {
             this.aftersNonTerminal.put(nonTerminal.getID(), this.aftersToNonTerminal(nonTerminal));
+        }
+    }
+    
+    private void foundSetSelect(){
+        int i=0;
+        for(Production production : grammar.getProductions()){
+            List<Terminal> select = new ArrayList<>();
+            select.addAll(this.firstsProduction.get(i));
+            if(this.ProductionVoidables.contains(i)){
+                select.addAll(this.aftersNonTerminal.get(production.getLeftSide().getID()));
+            }
+            selectionProduction.put(i, select);
+            i++;
         }
     }
 
