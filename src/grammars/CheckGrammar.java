@@ -169,6 +169,7 @@ public class CheckGrammar extends javax.swing.JFrame {
         this.nonTerminals = grammar.getLeftSiders();
         this.stack.push(grammar.getProductions().get(0).getLeftSide());
         fillTableBasics();
+        
     }
 
     /**
@@ -204,9 +205,6 @@ public class CheckGrammar extends javax.swing.JFrame {
         Recognizer a =  new Recognizer(grammar);
         List<Terminal> terminals = new ArrayList<>();
      
-        
-        //SE LLENA LA TABLA CON LAS OPERACIONES CORRESPONDIENTES
-        
         int k = 1;
         String b = "#"+k;
         int m = grammar.getProductions().size();
@@ -245,21 +243,21 @@ public class CheckGrammar extends javax.swing.JFrame {
             k++;
             b = b+k;
             i++;
-           
-            //System.out.println(grammar.getLeftSiders().get(i).toString());
-            //System.out.println(productions.get(i).rightSide);
+          
         }
         System.out.println("\n");
         model.setValueAt("▼", rows, 0);
-        /*
-        for(int i = 0;i < grammar.getProductions().size();i++){
-            System.out.println(grammar.getProductions().get(i).getLeftSide().toString());
-        }
-       
-        */
+   
+        
         
         
     }
+    
+    /**
+     * This metod let us get one specific production
+     * @param position Position is the number of the production searched
+     * @return Return a list which has the terminals and non terminals of a production
+     */
     public String toStringRightSide(int position){
         
         List<Production> productions = new ArrayList<>();
@@ -269,7 +267,11 @@ public class CheckGrammar extends javax.swing.JFrame {
     
     }
     
-    
+    /**
+     * This metod returns one transition correspondent to its production
+     * @param operation Operation is the production as a string
+     * @return Returns the transition  as a string
+     */
     public String getTransition(String operation){
         
         
@@ -282,7 +284,11 @@ public class CheckGrammar extends javax.swing.JFrame {
     
     }
     
-    
+    /**
+     * This metod let us reverse a production for the replace operation
+     * @param transition Transition is the production
+     * @return Returns the production in reverse
+     */
     public String reverseTransition(String transition){
         
         
@@ -307,7 +313,12 @@ public class CheckGrammar extends javax.swing.JFrame {
     return answer;
     }
     
-    
+    /**
+     * This metod let us the number of the column acording with its header
+     * @param model Is the table
+     * @param terminal Is the header searched
+     * @return Returns the position of the column
+     */
     public int returnColumn(DefaultTableModel model, String terminal){
         
         for(int i=0;i < model.getColumnCount();i++){
