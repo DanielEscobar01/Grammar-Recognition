@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -30,6 +29,7 @@ public class CheckGrammar extends javax.swing.JFrame {
         if(grammar.isS()) this.grammarType.setText("S");
         if(grammar.isQ()) this.grammarType.setText("Q");
         if(grammar.isLL1()) this.grammarType.setText("LL1");
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.table.setEnabled(false);
         this.table.getTableHeader().setResizingAllowed(false);
@@ -176,9 +176,9 @@ public class CheckGrammar extends javax.swing.JFrame {
      * This method let us fill the table with the right elements
      */
     public void fillTableBasics() {
+        
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.addColumn("In Stack");
-        TableColumnModel n = table.getColumnModel();
         
         for (int i = 0; i < this.terminals.size(); i++) {
             // CON ESTA AÑADIMOS EL RESTO DE COLUMNAS
@@ -203,8 +203,8 @@ public class CheckGrammar extends javax.swing.JFrame {
              
         //Set for the SetSelection of each N
         Recognizer a =  new Recognizer(grammar);
-        List<Terminal> terminals = new ArrayList<>();
-     
+        
+       
         int k = 1;
         String b = "#"+k;
         int m = grammar.getProductions().size();
@@ -247,11 +247,11 @@ public class CheckGrammar extends javax.swing.JFrame {
         }
         System.out.println("\n");
         model.setValueAt("▼", rows, 0);
-   
-        
-        
         
     }
+
+    
+
     
     /**
      * This metod let us get one specific production
@@ -327,9 +327,6 @@ public class CheckGrammar extends javax.swing.JFrame {
     return 0;
     }
 
-    public void isCorrect(){
-        
-    }
     
     /**
      * @param args the command line arguments

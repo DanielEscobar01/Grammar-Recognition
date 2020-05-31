@@ -223,6 +223,7 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="submitGrammarMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitGrammarActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="addLambdaLbl">

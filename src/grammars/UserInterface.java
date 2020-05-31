@@ -19,6 +19,8 @@ public class UserInterface extends javax.swing.JFrame {
     Recognizer r;
     Grammar grammar = new Grammar();
     Production temporalProduction = new Production();
+    DefaultTableModel model;
+    
 
     /**
      * Creates new form UserInterface
@@ -26,6 +28,7 @@ public class UserInterface extends javax.swing.JFrame {
     public UserInterface() {
         initComponents();
         this.setResizable(false);
+        this.setLocationRelativeTo(null);    
         terminalRight.setTransferHandler(null); // This doesnt let the user to type more than one character.
         addTerminalRight.setVisible(false); // We put in false value, until the user write the left side
         addNonTerminalRight.setVisible(false); // We put in false value, until the user write the left side
@@ -137,6 +140,11 @@ public class UserInterface extends javax.swing.JFrame {
         submitGrammar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 submitGrammarMouseClicked(evt);
+            }
+        });
+        submitGrammar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitGrammarActionPerformed(evt);
             }
         });
 
@@ -344,6 +352,38 @@ public class UserInterface extends javax.swing.JFrame {
 
     }//GEN-LAST:event_newProductionMouseClicked
 
+    
+    
+    /**
+     * This metod evaluated if all selections set for the same N are differents
+     * @param grammar Is the grammar to evaluate
+     * @return Return true if all selections set are differents for the same N, return false if not
+     */
+    public boolean checkSelectionSet(Grammar grammar){
+        
+        
+        Recognizer a =  new Recognizer(grammar);
+        int i = 0;
+        int m = grammar.getProductions().size();
+       
+        String currentN, set1,set2;
+        while(i<m){
+            if((i+1)<m){
+            currentN = grammar.getProductions().get(i).getLeftSide().toString();
+            set1 = a.getSelectionProduction().get(i).toString();  
+            if(grammar.getProductions().get(i+1).getLeftSide().toString().equals(currentN)){
+                set2 =  a.getSelectionProduction().get(i+1).toString();
+                System.out.println(set1+"  "+set2);
+                if(set1.equals(set2)) return false;
+            }
+            
+            }
+            i++;
+        }
+           
+    return true;  
+    
+    }
     /**
      * This method creates a grammar, if there are any problem the user have to
      * input again the grammar
@@ -353,9 +393,13 @@ public class UserInterface extends javax.swing.JFrame {
     private void submitGrammarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitGrammarMouseClicked
         rightSideAuxiliar = 0; // Reinitializing parameter
         //grammar.addProduction(temporalProduction);
+        boolean allselectionDiferents = checkSelectionSet(grammar);
+        if(allselectionDiferents){
         if (!grammar.isNonTerminalWithoutProduction()) {
             JOptionPane.showMessageDialog(null, "One, or more of your terminals does not have a production");
-            DefaultTableModel model = (DefaultTableModel) grammarTable.getModel();
+            
+            
+            model = (DefaultTableModel) grammarTable.getModel();
             model.setRowCount(0);
             grammar.reinitialize();
             this.addLambda.setVisible(false);
@@ -364,10 +408,12 @@ public class UserInterface extends javax.swing.JFrame {
             this.addTerminalRight.setVisible(false);
             this.addLeftSide.setVisible(true);
             this.leftSideID.setEnabled(true);
-        } else {
+            }else {
+            
             grammar.setFirstAlive();
             CheckGrammar checkGrammar = new CheckGrammar();
             checkGrammar.setGrammar(grammar);
+            
             Recognizer r = new Recognizer(grammar);
             System.out.println("Non Terminals Voidables");
             for(NonTerminal nonTerminal : r.getNonTerminalsVoidables()){
@@ -395,10 +441,24 @@ public class UserInterface extends javax.swing.JFrame {
             }
             checkGrammar.setVisible(true);
             this.setVisible(false);          
-        }
+        
         grammar.checkDeadNonTerminals();
+        }
+        }else{
+           
+        model = (DefaultTableModel) grammarTable.getModel();
+        model.setColumnCount(3);
+        model.setRowCount(0);
+        grammar = new Grammar();
+        JOptionPane.showMessageDialog(null, "The selections set for the same N are equals, the AP can't construided");
+       
+        }
+        
     }//GEN-LAST:event_submitGrammarMouseClicked
-
+    
+    
+   
+       
     /**
      * This method let us create a terminal lambda and the creates a new
      * production
@@ -418,6 +478,10 @@ public class UserInterface extends javax.swing.JFrame {
         newProduction.setVisible(false);
         addLambda.setVisible(false);
     }//GEN-LAST:event_addLambdaMouseClicked
+
+    private void submitGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitGrammarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_submitGrammarActionPerformed
 
     /**
      * @param args the command line arguments
