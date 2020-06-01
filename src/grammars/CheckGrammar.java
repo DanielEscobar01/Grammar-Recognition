@@ -21,8 +21,7 @@ public class CheckGrammar extends javax.swing.JFrame {
     Stack<Object> stack = new Stack<>();
     private List<Terminal> terminals = new ArrayList<>();
     private List<NonTerminal> nonTerminals = new ArrayList<>();
-    List<Terminal> symbolsOfinputFinal; 
-    List<String> symbolsOnTopStackFinal;
+    List<String> transitions = new ArrayList<>();
     int matriz[][];
 
   
@@ -240,7 +239,6 @@ public class CheckGrammar extends javax.swing.JFrame {
             
             if((i+1)<m){
             if(!grammar.getProductions().get(i+1).getLeftSide().toString().equals(currentN)){
-                
                 row++;
                
             }}
@@ -249,6 +247,7 @@ public class CheckGrammar extends javax.swing.JFrame {
             
             
             String h = b+": "+getTransition(operation);
+            transitions.add(getTransition(operation));
             jTextPane1.setText(jTextPane1.getText()+"\n"+h);
             
             
@@ -262,15 +261,15 @@ public class CheckGrammar extends javax.swing.JFrame {
         returnSymbolsOnTopStack(grammar);
         returnSymbolsOfinput(grammar);
         getMatriz(matriz);
-         
+        getTransitions(transitions);
+        
+        
         System.out.println("\n");
         model.setValueAt("▼", rows, 0);
         
     }
     
     public static void getMatriz(int a[][]) {
-        
-       
         
         int numberOfRows = a.length;
         int numberOfColumns = a[0].length;
@@ -283,7 +282,12 @@ public class CheckGrammar extends javax.swing.JFrame {
         } 
     }
 
+    public static void getTransitions(List a){
     
+        for(int i = 0;i < a.size();i++){
+            System.out.println(a.get(i));
+        }
+    }
     
     public static List returnSymbolsOnTopStack(Grammar grammar){
     
