@@ -64,6 +64,7 @@ public class Grammar {
      * @return The list with all terminals
      */
     public List<Terminal> getTerminals() {
+        
         Terminal terminal = new Terminal('┐');
         terminals.add(terminal);
         return this.terminals;

@@ -6,6 +6,7 @@
 package grammars;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +21,11 @@ public class CheckGrammar extends javax.swing.JFrame {
     Stack<Object> stack = new Stack<>();
     private List<Terminal> terminals = new ArrayList<>();
     private List<NonTerminal> nonTerminals = new ArrayList<>();
+    List<Terminal> symbolsOfinputFinal; 
+    List<String> symbolsOnTopStackFinal;
+    int matriz[][];
 
+  
     /**
      * Creates new form CheckGrammar
      */
@@ -203,8 +208,8 @@ public class CheckGrammar extends javax.swing.JFrame {
              
         //Set for the SetSelection of each N
         Recognizer a =  new Recognizer(grammar);
+      
         
-       
         int k = 1;
         String b = "#"+k;
         int m = grammar.getProductions().size();
@@ -212,22 +217,30 @@ public class CheckGrammar extends javax.swing.JFrame {
         int row = 0;
         int indexOfColumn;
         
-        indexOfColumn = returnColumn(model,"¬");
-        model.setValueAt("Acepte", model.getRowCount()-1, model.getColumnCount()-1);
         
+        model.setValueAt("Acepte", model.getRowCount()-1, model.getColumnCount()-1);
+         
+        
+        int numberOfRows = model.getRowCount();
+        int numberOfColumns = model.getColumnCount();
+       
+        matriz = new int[numberOfRows][numberOfColumns];
         String currentN;
         while(i<m){
             
         
             currentN = grammar.getProductions().get(i).getLeftSide().toString();
+            
             terminals = a.getSelectionProduction().get(i);      
             for(int s = 0; s < terminals.size();s++){
                 indexOfColumn = returnColumn(model,terminals.get(s).toString());
-                model.setValueAt(b,row,indexOfColumn);              
+                model.setValueAt(b,row,indexOfColumn);
+                matriz[row][indexOfColumn] = k;
             }
             
             if((i+1)<m){
             if(!grammar.getProductions().get(i+1).getLeftSide().toString().equals(currentN)){
+                
                 row++;
                
             }}
@@ -245,13 +258,82 @@ public class CheckGrammar extends javax.swing.JFrame {
             i++;
           
         }
+        
+        returnSymbolsOnTopStack(grammar);
+        returnSymbolsOfinput(grammar);
+        getMatriz(matriz);
+         
         System.out.println("\n");
         model.setValueAt("▼", rows, 0);
         
     }
+    
+    public static void getMatriz(int a[][]) {
+        
+       
+        
+        int numberOfRows = a.length;
+        int numberOfColumns = a[0].length;
+        for(int w=0;w<numberOfRows;w++){
+            for(int e=0;e <numberOfColumns; e++){
+                System.out.print(a[w][e]+" ");
+                
+            } 
+            System.out.println("");
+        } 
+    }
 
     
+    
+    public static List returnSymbolsOnTopStack(Grammar grammar){
+    
+        List<String> symbolsOnTopStack = new ArrayList<>(); 
+        int m = grammar.getProductions().size();
+        int i = 0;
+        String currentN;
+        while(i<m){
+        currentN = grammar.getProductions().get(i).getLeftSide().toString();
+        symbolsOnTopStack.add(currentN);
+        i++;
+        }
+        HashSet hs = new HashSet();
+        symbolsOnTopStack.add("▼");
+        hs.addAll(symbolsOnTopStack);
+        symbolsOnTopStack.clear();
+        symbolsOnTopStack.addAll(hs);
+        
+        for(int g =0 ; g< symbolsOnTopStack.size();g++){
+             System.out.println(symbolsOnTopStack.get(g)+" ");
+        }
+         
+    return  symbolsOnTopStack;   
+    }
 
+    public static List returnSymbolsOfinput(Grammar grammar){
+    
+        List<Terminal> symbolsOfinput = new ArrayList<>();
+        boolean ber = true;
+        symbolsOfinput = grammar.getTerminals();
+        HashSet hs = new HashSet();
+        hs.addAll(symbolsOfinput);
+        symbolsOfinput.clear();
+        symbolsOfinput.addAll(hs);
+               
+        for(int g =0 ; g< symbolsOfinput.size();g++){
+             if(symbolsOfinput.get(g).toString().equals("┐") && ber == true){
+                symbolsOfinput.remove(g);
+                ber = false;
+                break;
+             }
+        } 
+        
+        for(int f = 0; f< symbolsOfinput.size();f++){
+            System.out.println(symbolsOfinput.get(f));
+        }
+        
+    return symbolsOfinput;
+    }
+    
     
     /**
      * This metod let us get one specific production

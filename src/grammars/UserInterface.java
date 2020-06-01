@@ -439,6 +439,7 @@ public class UserInterface extends javax.swing.JFrame {
             for(int i = 0;i<grammar.getProductions().size();i++){
                 System.out.println("Production " + String.valueOf(i) + " --- " + r.getSelectionProduction().get(i));
             }
+            
             checkGrammar.setVisible(true);
             this.setVisible(false);          
         
