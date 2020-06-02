@@ -316,7 +316,6 @@ public class CheckGrammar extends javax.swing.JFrame {
             boolean f = false;
             int posicionColumna = 1;
             for (int n = 0; n < SymbolsOfInput.size(); n++) {
-                
                 if(terminal == SymbolsOfInput.get(n).getSymbol()) {
                     f = true;
                     posicionColumna += n;
@@ -330,7 +329,8 @@ public class CheckGrammar extends javax.swing.JFrame {
             }
             
             String ss = pila.get(pila.size()-1).toString();
-      
+            
+            
             int row = putoPablito.get(ss);
             
             if (matriz[row][posicionColumna] != 0) {
