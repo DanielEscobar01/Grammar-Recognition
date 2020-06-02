@@ -6,6 +6,7 @@
 package grammars;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
@@ -24,15 +25,20 @@ public class CheckGrammar extends javax.swing.JFrame {
     List<String> transitions = new ArrayList<>();
     int matriz[][];
 
-  
     /**
      * Creates new form CheckGrammar
      */
     public CheckGrammar() {
         initComponents();
-        if(grammar.isS()) this.grammarType.setText("S");
-        if(grammar.isQ()) this.grammarType.setText("Q");
-        if(grammar.isLL1()) this.grammarType.setText("LL1");
+        if (grammar.isS()) {
+            this.grammarType.setText("S");
+        }
+        if (grammar.isQ()) {
+            this.grammarType.setText("Q");
+        }
+        if (grammar.isLL1()) {
+            this.grammarType.setText("LL1");
+        }
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.table.setEnabled(false);
@@ -73,6 +79,11 @@ public class CheckGrammar extends javax.swing.JFrame {
 
         check.setFont(new java.awt.Font("Monaco", 3, 14)); // NOI18N
         check.setText("CHECK");
+        check.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Monaco", 3, 24)); // NOI18N
         jLabel2.setText("The string you check:");
@@ -162,6 +173,11 @@ public class CheckGrammar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkActionPerformed
+        
+        System.out.println(checkG(userString.getText()));
+    }//GEN-LAST:event_checkActionPerformed
+
     /**
      * This method let us set the grammar to be evaluated
      *
@@ -173,17 +189,17 @@ public class CheckGrammar extends javax.swing.JFrame {
         this.nonTerminals = grammar.getLeftSiders();
         this.stack.push(grammar.getProductions().get(0).getLeftSide());
         fillTableBasics();
-        
+
     }
 
     /**
      * This method let us fill the table with the right elements
      */
     public void fillTableBasics() {
-        
+
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.addColumn("In Stack");
-        
+
         for (int i = 0; i < this.terminals.size(); i++) {
             // CON ESTA AÑADIMOS EL RESTO DE COLUMNAS
             model.addColumn(terminals.get(i).toString());
@@ -194,127 +210,231 @@ public class CheckGrammar extends javax.swing.JFrame {
         for (int i = 0; i <= rows; i++) {
             model.addRow(x);
         }
-        int j=0;
+        int j = 0;
         for (int i = 0; i < rows; i++) {
             if (i < grammar.getLeftSiders().size()) {
                 model.setValueAt(grammar.getLeftSiders().get(i).toString(), i, 0);
+                
             } else {
                 model.setValueAt(grammar.terminalsInAlpha().get(j).toString(), i, 0);
+               
                 j++;
             }
         }
-       
-             
+
         //Set for the SetSelection of each N
-        Recognizer a =  new Recognizer(grammar);
-      
-        
+        Recognizer a = new Recognizer(grammar);
+
         int k = 1;
-        String b = "#"+k;
+        String b = "#" + k;
         int m = grammar.getProductions().size();
         int i = 0;
         int row = 0;
         int indexOfColumn;
-        
-        
-        model.setValueAt("Acepte", model.getRowCount()-1, model.getColumnCount()-1);
-         
-        
+
+        model.setValueAt("Acepte", model.getRowCount() - 1, model.getColumnCount() - 1);
+
         int numberOfRows = model.getRowCount();
         int numberOfColumns = model.getColumnCount();
-       
-        matriz = new int[numberOfRows][numberOfColumns];
-        String currentN;
-        while(i<m){
-            
         
+        matriz = new int[numberOfRows][numberOfColumns];
+        matriz[numberOfRows-1][numberOfColumns-1] = -1;
+        String currentN;
+        while (i < m) {
+
             currentN = grammar.getProductions().get(i).getLeftSide().toString();
-            
-            terminals = a.getSelectionProduction().get(i);      
-            for(int s = 0; s < terminals.size();s++){
-                indexOfColumn = returnColumn(model,terminals.get(s).toString());
-                model.setValueAt(b,row,indexOfColumn);
+
+            terminals = a.getSelectionProduction().get(i);
+            for (int s = 0; s < terminals.size(); s++) {
+                indexOfColumn = returnColumn(model, terminals.get(s).toString());
+                model.setValueAt(b, row, indexOfColumn);
                 matriz[row][indexOfColumn] = k;
             }
-            
-            if((i+1)<m){
-            if(!grammar.getProductions().get(i+1).getLeftSide().toString().equals(currentN)){
-                row++;
-               
-            }}
-            
+
+            if ((i + 1) < m) {
+                if (!grammar.getProductions().get(i + 1).getLeftSide().toString().equals(currentN)) {
+                    row++;
+                }
+            }
+
             String operation = toStringRightSide(i);
-            
-            
-            String h = b+": "+getTransition(operation);
+
+            String h = b + ": " + getTransition(operation);
             transitions.add(getTransition(operation));
-            jTextPane1.setText(jTextPane1.getText()+"\n"+h);
-            
-            
-            b = b.substring(0,1);
+            jTextPane1.setText(jTextPane1.getText() + "\n" + h);
+
+            b = b.substring(0, 1);
             k++;
-            b = b+k;
+            b = b + k;
             i++;
-          
+
         }
-        
-        returnSymbolsOnTopStack(grammar);
+
+        int indexOfRow = 0;
+        String s = null;
+        /*returnSymbolsOnTopStack(grammar);
         returnSymbolsOfinput(grammar);
         getMatriz(matriz);
-        getTransitions(transitions);
+        getTransitions(transitions);*/
+        for(int t = 0; t < numberOfRows-1; t++){
+            s =  String.valueOf(model.getValueAt(t, 0));
+            if(!s.contains("<")){
+            indexOfRow = t;
+            indexOfColumn = returnColumn(model, s);
+            model.setValueAt("#0", indexOfRow, row);
+            s = " Desapile,avance";
+            jTextPane1.setText(jTextPane1.getText() + "\n" +"#0: "+ s);
+            transitions.add(s);
+            break;
+            }
+        }
         
         
         System.out.println("\n");
         model.setValueAt("▼", rows, 0);
-        
-    }
-    
-    public static void getMatriz(int a[][]) {
-        
-        int numberOfRows = a.length;
-        int numberOfColumns = a[0].length;
-        for(int w=0;w<numberOfRows;w++){
-            for(int e=0;e <numberOfColumns; e++){
-                System.out.print(a[w][e]+" ");
-                
-            } 
-            System.out.println("");
-        } 
+
     }
 
-    public static void getTransitions(List a){
+    public  boolean checkG(String g) {
+
+        List<Terminal> SymbolsOfInput = returnSymbolsOfinput(grammar);
+        List<String> SymbolsOnStack = returnSymbolsOnTopStack(grammar);
+        HashMap<String, Integer> putoPablito = new HashMap();
+        
+        for (int j = 0; j < SymbolsOnStack.size(); j++) {
+            putoPablito.put(SymbolsOnStack.get(j), j);
+        }
+
+        Stack pila = new Stack();
+        pila.push("▼");
+        pila.push(grammar.getLeftSiders().get(0).getID());
+        g = g+"┐";
+        char[] a = g.toCharArray();
+        int i = 0;
+        do {
+            char terminal = a[i];
+            boolean f = false;
+            int posicionColumna = 1;
+            for (int n = 0; n < SymbolsOfInput.size(); n++) {
+                
+                if(terminal == SymbolsOfInput.get(n).getSymbol()) {
+                    f = true;
+                    posicionColumna += n;
+                    break;
+                }
+            }
+            //11¬
+            if (!f) {
+                
+                return false;
+            }
+            
+            String ss = pila.get(pila.size()-1).toString();
+      
+            int row = putoPablito.get(ss);
+            
+            if (matriz[row][posicionColumna] != 0) {
+                if(matriz[row][posicionColumna] == -1) return true;
+                String transition = transitions.get(matriz[row][posicionColumna] - 1);
+                char[] b = transition.toCharArray();
+                int vmax = 0;
+                if (b[1] == 'R') {
+                    for (int k = 10; k < b.length; k++) {
+                        if (b[k] == ')'){
+                        vmax = k - 1;
+                        break;
+                        }
+                    }
+                  
+                    b = transition.substring(10, vmax).toCharArray();
+                    pila.pop();
+                    for (int l = 0; l < b.length; l++) {
+                        if (b[l] != '<' && b[l] != '>') {
+                            pila.push(b[l]);
+                            mostrarPila(pila);                           
+                        }
+                    }
+                    vmax = vmax + 5;
+                    char [] c = transition.toCharArray();
+                    
+                    if (c[vmax] == 'a') {
+
+                        i++;
+                    }
+                } else {
+                    pila.pop();
+                    mostrarPila(pila);
+                    if (b[10] == 'a') {
+                        i++;
+                    }
+                }
+            } else {
+                return false;
+            }
+            
+        } while (i < a.length);
+        //MK 130
+        
+        return pila.pop().toString().equals("▼");
+    }
+
+    public void mostrarPila(Stack pila){
+        for(int i = 0;i<pila.size()-1;i++){
+            System.out.println(pila.get(i));
+        }
     
-        for(int i = 0;i < a.size();i++){
+    }
+    
+    
+    
+    public static void getMatriz(int a[][]) {
+
+        int numberOfRows = a.length;
+        int numberOfColumns = a[0].length;
+        for (int w = 0; w < numberOfRows; w++) {
+            for (int e = 0; e < numberOfColumns; e++) {
+                
+                System.out.print(a[w][e] + " ");
+
+            }
+            System.out.println(""); 
+        }
+       
+    }
+
+    public static void getTransitions(List a) {
+
+        for (int i = 0; i < a.size(); i++) {
             System.out.println(a.get(i));
         }
     }
-    
-    public static List returnSymbolsOnTopStack(Grammar grammar){
-    
-        List<String> symbolsOnTopStack = new ArrayList<>(); 
+
+    public static List<String> returnSymbolsOnTopStack(Grammar grammar) {
+
+        List<String> symbolsOnTopStack = new ArrayList<>();
         int m = grammar.getProductions().size();
         int i = 0;
         String currentN;
-        while(i<m){
-        currentN = grammar.getProductions().get(i).getLeftSide().toString();
-        symbolsOnTopStack.add(currentN);
-        i++;
+        while (i < m) {
+            currentN = grammar.getProductions().get(i).getLeftSide().getID();
+            i++;
+            if(symbolsOnTopStack.contains(currentN)) continue;
+            symbolsOnTopStack.add(currentN);
+            
         }
-        HashSet hs = new HashSet();
-        symbolsOnTopStack.add("▼");
-        hs.addAll(symbolsOnTopStack);
-        symbolsOnTopStack.clear();
-        symbolsOnTopStack.addAll(hs);
         
-        for(int g =0 ; g< symbolsOnTopStack.size();g++){
-             System.out.println(symbolsOnTopStack.get(g)+" ");
-        }
-         
-    return  symbolsOnTopStack;   
+        symbolsOnTopStack.add("▼");
+        
+        /*
+        for (int g = 0; g < symbolsOnTopStack.size(); g++) {
+            System.out.println(symbolsOnTopStack.get(g) + " ");
+        }*/
+
+        return symbolsOnTopStack;
     }
 
-    public static List returnSymbolsOfinput(Grammar grammar){
-    
+    public static List<Terminal> returnSymbolsOfinput(Grammar grammar) {
+
         List<Terminal> symbolsOfinput = new ArrayList<>();
         boolean ber = true;
         symbolsOfinput = grammar.getTerminals();
@@ -322,98 +442,115 @@ public class CheckGrammar extends javax.swing.JFrame {
         hs.addAll(symbolsOfinput);
         symbolsOfinput.clear();
         symbolsOfinput.addAll(hs);
-               
-        for(int g =0 ; g< symbolsOfinput.size();g++){
-             if(symbolsOfinput.get(g).toString().equals("┐") && ber == true){
+
+        for (int g = 0; g < symbolsOfinput.size(); g++) {
+            if (symbolsOfinput.get(g).toString().equals("┐") && ber == true) {
                 symbolsOfinput.remove(g);
                 ber = false;
                 break;
-             }
-        } 
-        
-        for(int f = 0; f< symbolsOfinput.size();f++){
-            System.out.println(symbolsOfinput.get(f));
+            }
         }
-        
-    return symbolsOfinput;
+        /*
+        for (int f = 0; f < symbolsOfinput.size(); f++) {
+            System.out.println(symbolsOfinput.get(f));
+        }*/
+
+        return symbolsOfinput;
     }
-    
-    
+
     /**
      * This metod let us get one specific production
+     *
      * @param position Position is the number of the production searched
-     * @return Return a list which has the terminals and non terminals of a production
+     * @return Return a list which has the terminals and non terminals of a
+     * production
      */
-    public String toStringRightSide(int position){
-        
+    public String toStringRightSide(int position) {
+
         List<Production> productions = new ArrayList<>();
         productions = grammar.getProductions();
-        
+
         return productions.get(position).rightSide.toString();
-    
+
     }
-    
+
     /**
      * This metod returns one transition correspondent to its production
+     *
      * @param operation Operation is the production as a string
-     * @return Returns the transition  as a string
+     * @return Returns the transition as a string
      */
-    public String getTransition(String operation){
-        
-        
+    public String getTransition(String operation) {
+
         String finalTransition = reverseTransition(operation);
-        
-        if(operation.charAt(1)=='<') return " Replace ("+finalTransition+")"+" , "+" retenga";
-        if(operation.equals("[λ]")) return " Desapile, retenga";
-        if(operation.length()==3) return " Desapile, avance";
-        return " Replace ("+finalTransition.substring(0, finalTransition.length()-1)+")"+" , "+" avance";
-    
+
+        if (operation.charAt(1) == '<') {
+            return " Replace (" + finalTransition + ")" + " , " + "retenga";
+        }
+        if (operation.equals("[λ]")) {
+            return " Desapile,retenga";
+        }
+        if (operation.length() == 3) {
+            return " Desapile,avance";
+        }
+        return " Replace (" + finalTransition.substring(0, finalTransition.length() - 1) + ")" + " , " + "avance";
+
     }
-    
+
     /**
      * This metod let us reverse a production for the replace operation
+     *
      * @param transition Transition is the production
      * @return Returns the production in reverse
      */
-    public String reverseTransition(String transition){
-        
-        
+    public String reverseTransition(String transition) {
+
         String answer = "";
         char[] v = transition.toCharArray();
-        for(int i = transition.length()-1;i > 0;i--){
-           
-            if(v[i] == '[') continue;
-            if(v[i] == ',') continue;
-            if(v[i] == ' ') continue;
-            if(v[i] == ']') continue;
-            if(v[i] == '<'){
-                answer = answer+">";
-            }else{
-            if(v[i] == '>'){
-                answer = answer+"<";
-            }else{
-            answer = answer + String.valueOf(v[i]);
-            }          
+        for (int i = transition.length() - 1; i > 0; i--) {
+
+            if (v[i] == '[') {
+                continue;
+            }
+            if (v[i] == ',') {
+                continue;
+            }
+            if (v[i] == ' ') {
+                continue;
+            }
+            if (v[i] == ']') {
+                continue;
+            }
+            if (v[i] == '<') {
+                answer = answer + ">";
+            } else {
+                if (v[i] == '>') {
+                    answer = answer + "<";
+                } else {
+                    answer = answer + String.valueOf(v[i]);
+                }
+            }
         }
-        }   
-    return answer;
+        return answer;
     }
-    
+
     /**
      * This metod let us the number of the column acording with its header
+     *
      * @param model Is the table
      * @param terminal Is the header searched
      * @return Returns the position of the column
      */
-    public int returnColumn(DefaultTableModel model, String terminal){
-        
-        for(int i=0;i < model.getColumnCount();i++){
-            if(model.getColumnName(i).equals(terminal)) return i;
-        }   
-    return 0;
+    public int returnColumn(DefaultTableModel model, String terminal) {
+
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            if (model.getColumnName(i).equals(terminal)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
-    
     /**
      * @param args the command line arguments
      */
