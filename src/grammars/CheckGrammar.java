@@ -238,7 +238,6 @@ public class CheckGrammar extends javax.swing.JFrame {
         int numberOfColumns = model.getColumnCount();
         
         matriz = new int[numberOfRows][numberOfColumns];
-        matriz[numberOfRows-1][numberOfColumns-1] = -1;
         String currentN;
         while (i < m) {
 
@@ -272,10 +271,12 @@ public class CheckGrammar extends javax.swing.JFrame {
 
         int indexOfRow = 0;
         String s = null;
-        /*returnSymbolsOnTopStack(grammar);
+        /*
+        returnSymbolsOnTopStack(grammar);
         returnSymbolsOfinput(grammar);
         getMatriz(matriz);
         getTransitions(transitions);*/
+        
         for(int t = 0; t < numberOfRows-1; t++){
             s =  String.valueOf(model.getValueAt(t, 0));
             if(!s.contains("<")){
@@ -294,7 +295,12 @@ public class CheckGrammar extends javax.swing.JFrame {
         model.setValueAt("▼", rows, 0);
 
     }
-
+    
+    /**
+     * This method let us know if one String can be derivated from our grammar
+     * @param g Is the string to evaluate
+     * @return Returns true if the string can be derivated, false if not
+     */
     public  boolean checkG(String g) {
 
         List<Terminal> SymbolsOfInput = returnSymbolsOfinput(grammar);
@@ -351,7 +357,7 @@ public class CheckGrammar extends javax.swing.JFrame {
                     for (int l = 0; l < b.length; l++) {
                         if (b[l] != '<' && b[l] != '>') {
                             pila.push(b[l]);
-                            mostrarPila(pila);                           
+                            showStack(pila);                           
                         }
                     }
                     vmax = vmax + 5;
@@ -363,7 +369,7 @@ public class CheckGrammar extends javax.swing.JFrame {
                     }
                 } else {
                     pila.pop();
-                    mostrarPila(pila);
+                    showStack(pila);
                     if (b[10] == 'a') {
                         i++;
                     }
@@ -373,12 +379,17 @@ public class CheckGrammar extends javax.swing.JFrame {
             }
             
         } while (i < a.length);
-        //MK 130
+       
         
         return pila.pop().toString().equals("▼");
     }
-
-    public void mostrarPila(Stack pila){
+    
+    
+    /**
+     * This method let us see the stack during the recognition process
+     * @param pila Is the stack
+     */
+    public void showStack(Stack pila){
         for(int i = 0;i<pila.size()-1;i++){
             System.out.println(pila.get(i));
         }
@@ -386,7 +397,10 @@ public class CheckGrammar extends javax.swing.JFrame {
     }
     
     
-    
+    /**
+     * This method let us see the matriz which has the transitions
+     * @param a Is the matriz
+     */
     public static void getMatriz(int a[][]) {
 
         int numberOfRows = a.length;
@@ -401,7 +415,11 @@ public class CheckGrammar extends javax.swing.JFrame {
         }
        
     }
-
+    
+    /**
+     * This metho let us know what are our transitions
+     * @param a Is the list that have all transitions
+     */
     public static void getTransitions(List a) {
 
         for (int i = 0; i < a.size(); i++) {
@@ -409,14 +427,24 @@ public class CheckGrammar extends javax.swing.JFrame {
         }
     }
 
-    public static List<String> returnSymbolsOnTopStack(Grammar grammar) {
+    /**
+     * This method let us see what are the symbols on the stack for the AP
+     * @param grammar Is the grammar
+     * @return Returns a list of String which has all symbols on the stack
+     */
+    public List<String> returnSymbolsOnTopStack(Grammar grammar) {
 
         List<String> symbolsOnTopStack = new ArrayList<>();
         int m = grammar.getProductions().size();
         int i = 0;
         String currentN;
+        String terminalOnRight;
         while (i < m) {
             currentN = grammar.getProductions().get(i).getLeftSide().getID();
+            if(!terminalOnRightSide(i).equals("")){
+            terminalOnRight = terminalOnRightSide(i);
+            if(!symbolsOnTopStack.contains(terminalOnRight)) symbolsOnTopStack.add(terminalOnRight); 
+            }
             i++;
             if(symbolsOnTopStack.contains(currentN)) continue;
             symbolsOnTopStack.add(currentN);
@@ -425,14 +453,46 @@ public class CheckGrammar extends javax.swing.JFrame {
         
         symbolsOnTopStack.add("▼");
         
-        /*
+        
         for (int g = 0; g < symbolsOnTopStack.size(); g++) {
             System.out.println(symbolsOnTopStack.get(g) + " ");
-        }*/
+        }
 
         return symbolsOnTopStack;
     }
-
+    
+    /**
+     * This metod let us if one production has a terminal in some alpha
+     * @param i Is the number of the production
+     * @return Return the alpha's terminal 
+     */
+    public String terminalOnRightSide(int i){
+    
+        String answer = "";
+        String g = toStringRightSide(i);
+        char [] b = g.toCharArray();
+       
+        int j = 1;
+            while(j< b.length){
+            if(b[j] == '<'){
+                j = j+4;
+            }else{
+                if(b[j] != '>' && b[j] != ',' && b[j] != '[' && b[j] != ']' && j != 1 && b[j] != ' '){
+                    answer = String.valueOf(b[j]);  
+                   
+                }  
+            }
+            j++;
+        }
+        
+    return answer;
+    }
+    
+    /**
+     * This method let us know what are the symbols of input for the AP
+     * @param grammar Is the grammar
+     * @return Returns a terminal's list which has all input's symbols
+     */
     public static List<Terminal> returnSymbolsOfinput(Grammar grammar) {
 
         List<Terminal> symbolsOfinput = new ArrayList<>();
